@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-enum Suits {SPADE, heart, dia, crab}
+enum Suits {SPADE, HEART, DIA, CRAB}
 
 public class CardTest {
 
@@ -15,5 +15,6 @@ public class CardTest {
 		assertEquals(Suits.SPADE, c.getSuits());
 		assertEquals(1, c.getNo());
 	}
+
 
 }
