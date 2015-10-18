@@ -2,8 +2,9 @@ package PlayingCards;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
 import java.security.SecureRandom;
+
+import org.junit.Test;
 
 public class CardComparator_shuffleTest {
 
@@ -12,7 +13,8 @@ public class CardComparator_shuffleTest {
 		SecureRandom rnd = new SecureRandom();
 		int num = rnd.nextInt(100);
 		System.out.println("num = " + num);
-
+		assertEquals(true, num >= 0);
+		assertEquals(true, num < 100);
 	}
 
 }
