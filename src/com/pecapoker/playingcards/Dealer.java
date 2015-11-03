@@ -1,6 +1,6 @@
 package com.pecapoker.playingcards;
 
-public class Dealer extends Person {
+abstract public class Dealer extends Person {
 	private Deck deck;
 	private PlayerList players;
 	public Dealer () {
@@ -52,4 +52,11 @@ public class Dealer extends Person {
 		return true;
 	}
 
+	/**
+	 * 二人のプレイヤーのうち、どっちが勝ったかを判定する
+	 * @param p1
+	 * @param p2
+	 * @return 勝ったほうのPlayer 引き分けの場合はnull
+	 */
+	abstract public Player judgeWinner(Player p1, Player p2);
 }

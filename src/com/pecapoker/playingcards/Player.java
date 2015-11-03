@@ -27,4 +27,22 @@ public class Player extends Person {
 		assert c != null;
 		hand.push(c);
 	}
+
+	/**
+	 * 手札の中で一番大きいカードを返す スーツは問わない
+	 * @return 一番大きいカード　一枚もなければnull
+	 */
+	public Card getHighestCard() {
+		Card maxCard = null;
+		for(Card c : this.hand.cardList) {
+			if (maxCard == null) {
+				maxCard = c;
+			}
+			else if (c.getValue() > maxCard.getValue()){
+				maxCard = c;
+			}
+		}
+		return maxCard;
+	}
+
 }

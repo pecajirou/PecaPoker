@@ -4,13 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.pecapoker.poker.PokerDealer;
-
 public class DealerTest {
 
 	@Test
 	public void testConstructor() {
-		PokerDealer d = new PokerDealer();
+		TestImpDealer d = new TestImpDealer();
 		assertEquals(0, d.getId());
 		assertEquals("Johnny", d.getName());
 	}
@@ -19,7 +17,7 @@ public class DealerTest {
 		//
 		// Setup
 		//
-		PokerDealer d = new PokerDealer();
+		TestImpDealer d = new TestImpDealer();
 		Player p = new Player(2, "testPlayer");
 		//
 		// Execute
@@ -39,7 +37,7 @@ public class DealerTest {
 		//
 		// Setup
 		//
-		PokerDealer d = new PokerDealer();
+		TestImpDealer d = new TestImpDealer();
 		Player p1 = new Player(1, "jirou");
 		d.addPlayer(p1);
 
@@ -65,7 +63,7 @@ public class DealerTest {
 		//
 		// Setup
 		//
-		PokerDealer d = new PokerDealer();
+		TestImpDealer d = new TestImpDealer();
 		Player p1 = new Player(1, "jirou");
 		d.addPlayer(p1);
 
@@ -103,7 +101,7 @@ public class DealerTest {
 		//
 		// Setup
 		//
-		PokerDealer d = new PokerDealer();
+		TestImpDealer d = new TestImpDealer();
 		Player p1 = new Player(1, "jirou");
 		Player p2 = new Player(2, "saburou");
 		d.addPlayer(p1);
@@ -138,7 +136,7 @@ public class DealerTest {
 		//
 		// Setup
 		//
-		PokerDealer d = new PokerDealer();
+		TestImpDealer d = new TestImpDealer();
 		Player p1 = new Player(1, "jirou");
 		Player p2 = new Player(2, "saburou");
 		d.addPlayer(p1);

@@ -1,5 +1,7 @@
 package com.pecapoker.playingcards;
 
+import com.pecapoker.playingcards.PcConstant.Suits;
+
 public class Deck extends CardSet{
 	public Deck(boolean useJoker) {
 		_initCards();
