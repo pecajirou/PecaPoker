@@ -37,4 +37,23 @@ public class PlayerTest {
 		assertEquals(c3, p.getHighestCard());
 	}
 
+	/**
+	 * 現在の手札を返すテスト
+	 */
+	@Test
+	public void testResetHand() {
+		Player p = new TestImpPlayer(1, "hiyoten");
+
+		Card c1 = new Card(Suits.CRAB, 7);
+		p.receiveHand(c1);
+		Card c2 = new Card(Suits.DIA, 2);
+		p.receiveHand(c2);
+
+		Hand h = p.resetHand();
+
+		assertEquals(0, p.getHandSize());
+		assertEquals(2, h.size());
+
+	}
+
 }

@@ -12,5 +12,4 @@ public class HoldemRoundActionRule extends RoundActionRule {
 	public void setCallAmount(int callAmount) {
 		this.callAmount = callAmount;
 	}
-
 }

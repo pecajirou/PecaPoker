@@ -28,11 +28,10 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 	 * アクションを選択する
 	 * @return 選択したアクション
 	 */
-	public Action getRoundAction(RoundActionRule rar)
+	public Action getRoundAction(RoundActionRule rar) throws RoundRulesException
 	{
 		if (true) {
-			this.setRoundStatus(RoundStatus.CALLED);
-			return new CallAction();
+			return call((HoldemRoundActionRule)rar);
 		}
 		else {
 			this.setRoundStatus(RoundStatus.FOLDED);
@@ -40,11 +39,13 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 		}
 	}
 
-	public void call(HoldemRoundActionRule rar) throws RoundRuleException {
+	public CallAction call(HoldemRoundActionRule rar) throws RoundRulesException {
+		System.out.println(this + " call");
 		if (this.chip < rar.getCallAmount()) {
-			throw new RoundRuleException("this.chip < rar.getCallAmount()");
+			throw new RoundRulesException("this.chip < rar.getCallAmount()");
 		}
 		this.setRoundStatus(RoundStatus.CALLED);
 		this.chip -= rar.getCallAmount();
+		return new CallAction(100);
 	}
 }

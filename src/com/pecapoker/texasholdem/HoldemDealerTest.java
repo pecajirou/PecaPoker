@@ -17,12 +17,10 @@ public class HoldemDealerTest extends TestCase {
 	@Override
 	protected void setUp()
 	{
-		System.out.println("settingUp");
 		_initPersons();
 	}
 	protected void tearDown()
 	{
-		System.out.println("tearDown");
 		;
 	}
 
@@ -38,7 +36,7 @@ public class HoldemDealerTest extends TestCase {
 	 * （仮実装）
 	 * 勝敗判定　引き分け
 	 */
-	public void testJudgeWinner_draw() {
+	public void testDecideWinner_draw() {
 		// TODO 勝敗判定は仮実装
 		// 値の大きいカードを持っているほうが勝ち
 		HoldemDealer d = new HoldemDealer();
@@ -47,7 +45,7 @@ public class HoldemDealerTest extends TestCase {
 		d.addPlayer(p1);
 		d.addPlayer(p2);
 
-		assertEquals(null, d.judgeWinner(p1, p2));
+		assertEquals(null, d.decideWinner(p1, p2));
 	}
 
 	@Test
@@ -55,7 +53,7 @@ public class HoldemDealerTest extends TestCase {
 	 * （仮実装）
 	 * 勝敗判定　カードの値が大きい方が勝ち
 	 */
-	public void testJudgeWinner() {
+	public void testDecideWinner() {
 		// TODO 勝敗判定は仮実装
 		// 値の大きいカードを持っているほうが勝ち
 		HoldemDealer d = new HoldemDealer();
@@ -66,16 +64,16 @@ public class HoldemDealerTest extends TestCase {
 
 		Card c1 = new Card(Suits.CRAB, 2);
 		p2.receiveHand(c1);
-		assertEquals(p2, d.judgeWinner(p1, p2));
+		assertEquals(p2, d.decideWinner(p1, p2));
 
 		Card c2 = new Card(Suits.CRAB, 3);
 		p1.receiveHand(c2);
-		assertEquals(p1, d.judgeWinner(p1, p2));
+		assertEquals(p1, d.decideWinner(p1, p2));
 
 		//Aが一番強い
 		Card c3 = new Card(Suits.CRAB, 1);
 		p2.receiveHand(c3);
-		assertEquals(p2, d.judgeWinner(p1, p2));
+		assertEquals(p2, d.decideWinner(p1, p2));
 	}
 
 	public void _initPersons()
@@ -92,12 +90,12 @@ public class HoldemDealerTest extends TestCase {
 	 * 全プレイヤーにアクションを促す
 	 * アクションしたプレイヤーは、RoundStatusが何かしら変わっている
 	 */
-	public void testRound() {
+	public void testRound() throws RoundRulesException{
 		assertEquals(2, d.getPlayers().size());
 		//
 		// Setup
 		//
-		d.resetRound();
+		d.initRound();
 		for (Player p : d.getPlayers()) {
 			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
 		}
@@ -114,7 +112,7 @@ public class HoldemDealerTest extends TestCase {
 			assertEquals(true, RoundStatus.NONE != ((HoldemPlayer)p).getRoundStatus());
 		}
 
-		d.resetRound();
+		d.initRound();
 		for (Player p : d.getPlayers()) {
 			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
 		}

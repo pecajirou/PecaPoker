@@ -1,13 +1,14 @@
 package com.pecapoker.playingcards;
 
-public class Action {
+public class Pot {
 	private int chip = 0;
 
 	public int getChip() {
 		return chip;
 	}
 
-	public void setChip(int chip) {
-		this.chip = chip;
+	public void addChip(int chip) {
+		this.chip += chip;
 	}
+
 }
