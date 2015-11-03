@@ -2,7 +2,7 @@ package com.pecapoker.texasholdem;
 
 import com.pecapoker.playingcards.Player;
 
-class PokerDealer extends com.pecapoker.playingcards.Dealer {
+class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 
 	@Override
 	public Player judgeWinner(Player p1, Player p2) {

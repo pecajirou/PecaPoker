@@ -2,6 +2,7 @@ package com.pecapoker.playingcards;
 
 public class Player extends Person {
 	private Hand hand;
+	private int chip = 0;
 
 	public Player(int id, String name)
 	{
@@ -26,6 +27,15 @@ public class Player extends Person {
 	{
 		assert c != null;
 		hand.push(c);
+	}
+
+	/**
+	 * チップを受け取る
+	 * @param チップ
+	 */
+	public void receiveChip(int c)
+	{
+		this.chip += c;
 	}
 
 	/**

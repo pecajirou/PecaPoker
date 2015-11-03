@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class PokerPlayerTest {
+public class HoldemPlayerTest {
 
 	@Test
 	public void testConstructor() {
-		PokerPlayer d = new PokerPlayer(1, "hiyoten");
+		HoldemPlayer d = new HoldemPlayer(1, "hiyoten");
 		assertEquals(1, d.getId());
 		assertEquals("hiyoten", d.getName());
 	}
