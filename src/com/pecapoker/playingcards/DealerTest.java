@@ -171,4 +171,5 @@ public class DealerTest {
 		assertEquals(26, p2.getHandSize());
 		//
 	}
+
 }

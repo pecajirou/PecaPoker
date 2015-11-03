@@ -3,10 +3,16 @@ package com.pecapoker.playingcards;
 abstract public class Dealer extends Person {
 	private Deck deck;
 	protected PlayerList players;
+	/**
+	 * 全Playerを１周するまでのルール
+	 */
+	protected RoundActionRule roundActionRule;
+
 	public Dealer () {
 		super(0, "Johnny");
 		deck = new Deck(false);
 		players = new PlayerList();
+		roundActionRule = new RoundActionRule();
 	}
 	public void shuffle() {
 		deck.shuffle();
@@ -59,4 +65,14 @@ abstract public class Dealer extends Person {
 	 * @return 勝ったほうのPlayer 引き分けの場合はnull
 	 */
 	abstract public Player judgeWinner(Player p1, Player p2);
+
+	/**
+	 * 全プレイヤーにアクションさせる
+	 */
+	public void round() {
+		for(Player p : players) {
+			Action ac = p.getRoundAction(roundActionRule);
+		}
+	}
+
 }

@@ -1,9 +1,13 @@
 package com.pecapoker.texasholdem;
 
-import com.pecapoker.playingcards.Action;
 import com.pecapoker.playingcards.Player;
 
 class HoldemDealer extends com.pecapoker.playingcards.Dealer {
+	public HoldemDealer()
+	{
+		super();
+		roundActionRule = new HoldemRoundActionRule();
+	}
 
 	@Override
 	public Player judgeWinner(Player p1, Player p2) {
@@ -27,15 +31,6 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 
 		return p2;
-	}
-
-	/**
-	 * 全プレイヤーにアクションさせる
-	 */
-	public void round() {
-		for(Player p : players) {
-			Action ac = p.getRoundAction();
-		}
 	}
 
 	public void resetRound() {

@@ -7,7 +7,7 @@ public class TestImpPlayer extends Player {
 	}
 
 	@Override
-	public Action getRoundAction() {
+	public Action getRoundAction(RoundActionRule rar) {
 		return null;
 	}
 

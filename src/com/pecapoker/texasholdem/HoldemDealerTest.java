@@ -118,6 +118,6 @@ public class HoldemDealerTest extends TestCase {
 		for (Player p : d.getPlayers()) {
 			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
 		}
-}
+	}
 
 }

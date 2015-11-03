@@ -2,7 +2,7 @@ package com.pecapoker.playingcards;
 
 abstract public class Player extends Person {
 	private Hand hand;
-	private int chip = 0;
+	protected int chip = 1000;
 
 	public Player(int id, String name)
 	{
@@ -38,6 +38,11 @@ abstract public class Player extends Person {
 		this.chip += c;
 	}
 
+	public int getChip()
+	{
+		return chip;
+	}
+
 	/**
 	 * 手札の中で一番大きいカードを返す スーツは問わない
 	 * @return 一番大きいカード　一枚もなければnull
@@ -55,5 +60,5 @@ abstract public class Player extends Person {
 		return maxCard;
 	}
 
-	abstract public Action getRoundAction();
+	abstract public Action getRoundAction(RoundActionRule rar);
 }
