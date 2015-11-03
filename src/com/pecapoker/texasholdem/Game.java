@@ -1,4 +1,4 @@
-package com.pecapoker.poker;
+package com.pecapoker.texasholdem;
 
 import com.pecapoker.playingcards.Dealer;
 
