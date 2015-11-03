@@ -35,4 +35,24 @@ public class HoldemPlayerTest {
 		assertEquals(RoundStatus.CALLED, p.getRoundStatus());
 		assertEquals(900, p.getChip());
 	}
+
+	/**
+	 * フォールドするとチップは減らない、状態がFOLDEDになる
+	 */
+	@Test
+	public void testFold() throws RoundRulesException {
+		HoldemPlayer p = new HoldemPlayer(1, "hiyoten");
+		assertEquals(1000, p.getChip());
+		assertEquals(RoundStatus.NONE, p.getRoundStatus());
+
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(100);
+		Action ac = p.fold();
+
+		assertEquals(true, ac instanceof FoldAction);
+		assertEquals(0, ac.getChip());
+
+		assertEquals(RoundStatus.FOLDED, p.getRoundStatus());
+		assertEquals(1000, p.getChip());
+	}
 }

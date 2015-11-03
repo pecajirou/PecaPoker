@@ -14,6 +14,15 @@ public class HoldemDealerTest extends TestCase {
 	HoldemPlayer p1;
 	HoldemPlayer p2;
 
+	public void _initPersons()
+	{
+		this.d = new HoldemDealer();
+		this.p1 = new HoldemPlayer(1, "jirou");
+		this.p2 = new HoldemPlayer(2, "saburou");
+		d.addPlayer(this.p1);
+		d.addPlayer(this.p2);
+	}
+
 	@Override
 	protected void setUp()
 	{
@@ -39,13 +48,11 @@ public class HoldemDealerTest extends TestCase {
 	public void testDecideWinner_draw() {
 		// TODO 勝敗判定は仮実装
 		// 値の大きいカードを持っているほうが勝ち
-		HoldemDealer d = new HoldemDealer();
-		HoldemPlayer p1 = new HoldemPlayer(1, "jirou");
-		HoldemPlayer p2 = new HoldemPlayer(2, "saburou");
-		d.addPlayer(p1);
-		d.addPlayer(p2);
-
+		// どっちもカードを持っていなければdraw
+		assertEquals(0, p1.getHandSize());
+		assertEquals(0, p2.getHandSize());
 		assertEquals(null, d.decideWinner(p1, p2));
+
 	}
 
 	@Test
@@ -74,16 +81,15 @@ public class HoldemDealerTest extends TestCase {
 		Card c3 = new Card(Suits.CRAB, 1);
 		p2.receiveHand(c3);
 		assertEquals(p2, d.decideWinner(p1, p2));
-	}
 
-	public void _initPersons()
-	{
-		this.d = new HoldemDealer();
-		this.p1 = new HoldemPlayer(1, "jirou");
-		this.p2 = new HoldemPlayer(2, "saburou");
-		d.addPlayer(this.p1);
-		d.addPlayer(this.p2);
-	}
+		// 値の優劣があっても、foldしていたら負け
+		p2.fold();
+		assertEquals(p1, d.decideWinner(p1, p2));
+
+		// 値の優劣があっても、二人ともfoldしていたら引き分け
+		p1.fold();
+		assertEquals(null, d.decideWinner(p1, p2));
+}
 
 	@Test
 	/**

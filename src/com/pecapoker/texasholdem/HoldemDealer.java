@@ -3,6 +3,7 @@ package com.pecapoker.texasholdem;
 import com.pecapoker.playingcards.Action;
 import com.pecapoker.playingcards.Player;
 import com.pecapoker.playingcards.Pot;
+import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
 class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	public HoldemDealer()
@@ -14,6 +15,20 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	@Override
 	protected Player decideWinner(Player p1, Player p2) {
 		// TODO 仮実装
+		if ((((HoldemPlayer)p1).getRoundStatus() == RoundStatus.FOLDED)
+			&& (((HoldemPlayer)p1).getRoundStatus() == RoundStatus.FOLDED) )
+		{
+			return null;
+		}
+		if (((HoldemPlayer)p1).getRoundStatus() == RoundStatus.FOLDED)
+		{
+			return p2;
+		}
+		if (((HoldemPlayer)p2).getRoundStatus() == RoundStatus.FOLDED)
+		{
+			return p1;
+		}
+
 		if (p1.getHighestCard() == null && p2.getHighestCard() == null)
 		{
 			return null;

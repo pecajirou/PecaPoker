@@ -23,6 +23,7 @@ abstract public class Dealer extends Person {
 		deck = new Deck(false);
 		players = new PlayerList();
 		roundActionRule = new RoundActionRule();
+		pot = new Pot();
 	}
 	public void shuffle() {
 		deck.shuffle();

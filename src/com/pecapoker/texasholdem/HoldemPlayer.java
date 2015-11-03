@@ -41,6 +41,7 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 
 	public CallAction call(HoldemRoundActionRule rar) throws RoundRulesException {
 		System.out.println(this + " call");
+
 		if (this.chip < rar.getCallAmount()) {
 			throw new RoundRulesException("this.chip < rar.getCallAmount()");
 		}
@@ -48,4 +49,13 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 		this.chip -= rar.getCallAmount();
 		return new CallAction(100);
 	}
+
+
+	public Action fold() {
+		System.out.println(this + " fold");
+
+		this.setRoundStatus(RoundStatus.FOLDED);
+		return new FoldAction();
+	}
+
 }
