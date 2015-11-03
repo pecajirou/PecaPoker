@@ -1,4 +1,4 @@
-package PlayingCards;
+package com.pecapoker.playingcards;
 
 public class Card {
 	private int no;

@@ -1,4 +1,4 @@
-package PlayingCards;
+package com.pecapoker.playingcards;
 
 public class PcConstant {
 	public static final int NO_KING = 13;

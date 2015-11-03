@@ -1,4 +1,4 @@
-package PlayingCards;
+package com.pecapoker.playingcards;
 
 public class Deck extends CardSet{
 	public Deck(boolean useJoker) {

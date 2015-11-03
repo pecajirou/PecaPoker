@@ -1,4 +1,4 @@
-package PlayingCards;
+package com.pecapoker.playingcards;
 
 import static org.junit.Assert.*;
 

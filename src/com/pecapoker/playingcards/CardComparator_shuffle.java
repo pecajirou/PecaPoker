@@ -1,10 +1,10 @@
-package PlayingCards;
+package com.pecapoker.playingcards;
 
 import java.security.SecureRandom;
 import java.util.Comparator;
 
 public class CardComparator_shuffle implements Comparator<Card>{
-	//”äŠrƒƒ\ƒbƒh
+	//ï¿½ï¿½rï¿½ï¿½ï¿½\ï¿½bï¿½h
     public int compare(Card a, Card b) {
     	SecureRandom rnd = new SecureRandom();
     	return rnd.nextInt(2) - 1;

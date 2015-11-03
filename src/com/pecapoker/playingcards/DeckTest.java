@@ -1,4 +1,4 @@
-package PlayingCards;
+package com.pecapoker.playingcards;
 
 import static org.junit.Assert.*;
 
@@ -19,7 +19,7 @@ public class DeckTest {
 			}
 		}
 
-		// ‘S‚Ä”²‚¢‚½‚ç pop‚Ínull‚ð•Ô‚·
+		// ï¿½Sï¿½Ä”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ popï¿½ï¿½nullï¿½ï¿½Ô‚ï¿½
 		Card c = deck.pop();
 		assertEquals(null, c);
 	}
@@ -48,7 +48,7 @@ public class DeckTest {
 			beforeSuits = c.getSuits();
 			beforeNo = c.getNo();
 		}
-		// ‚P‚O‰ñˆÈãƒX[ƒcA”Žš‚ª•Ï‰»‚·‚é‚±‚Æ
+		// ï¿½Pï¿½Oï¿½ï¿½Èï¿½Xï¿½[ï¿½cï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï‰ï¿½ï¿½ï¿½ï¿½é‚±ï¿½ï¿½
 		System.out.println("diffSuits=" + diffSuits + ", diffNo=" + diffNo);
 		assertEquals(true, diffSuits >= 10);
 		assertEquals(true, diffNo >= 10);

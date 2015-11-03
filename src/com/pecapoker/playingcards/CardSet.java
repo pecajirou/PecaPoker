@@ -1,4 +1,4 @@
-package PlayingCards;
+package com.pecapoker.playingcards;
 
 import java.util.ArrayList;
 import java.util.List;
