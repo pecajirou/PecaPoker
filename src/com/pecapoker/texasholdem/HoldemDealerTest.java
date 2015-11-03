@@ -1,13 +1,30 @@
 package com.pecapoker.texasholdem;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import com.pecapoker.playingcards.Card;
-import com.pecapoker.playingcards.PcConstant.Suits;
+import com.pecapoker.playingcards.PcConst.Suits;
+import com.pecapoker.playingcards.Player;
+import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
-public class HoldemDealerTest {
+import junit.framework.TestCase;
+
+public class HoldemDealerTest extends TestCase {
+	HoldemDealer d;
+	HoldemPlayer p1;
+	HoldemPlayer p2;
+
+	@Override
+	protected void setUp()
+	{
+		System.out.println("settingUp");
+		_initPersons();
+	}
+	protected void tearDown()
+	{
+		System.out.println("tearDown");
+		;
+	}
 
 	@Test
 	public void testConstructor() {
@@ -38,7 +55,7 @@ public class HoldemDealerTest {
 	 * （仮実装）
 	 * 勝敗判定　カードの値が大きい方が勝ち
 	 */
-	public void testJudgeWinner_p2() {
+	public void testJudgeWinner() {
 		// TODO 勝敗判定は仮実装
 		// 値の大きいカードを持っているほうが勝ち
 		HoldemDealer d = new HoldemDealer();
@@ -60,4 +77,47 @@ public class HoldemDealerTest {
 		p2.receiveHand(c3);
 		assertEquals(p2, d.judgeWinner(p1, p2));
 	}
+
+	public void _initPersons()
+	{
+		this.d = new HoldemDealer();
+		this.p1 = new HoldemPlayer(1, "jirou");
+		this.p2 = new HoldemPlayer(2, "saburou");
+		d.addPlayer(this.p1);
+		d.addPlayer(this.p2);
+	}
+
+	@Test
+	/**
+	 * 全プレイヤーにアクションを促す
+	 * アクションしたプレイヤーは、RoundStatusが何かしら変わっている
+	 */
+	public void testRound() {
+		assertEquals(2, d.getPlayers().size());
+		//
+		// Setup
+		//
+		d.resetRound();
+		for (Player p : d.getPlayers()) {
+			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
+		}
+
+		//
+		// Execute
+		//
+		d.round();
+
+		//
+		// Verify
+		//
+		for (Player p : d.getPlayers()) {
+			assertEquals(true, RoundStatus.NONE != ((HoldemPlayer)p).getRoundStatus());
+		}
+
+		d.resetRound();
+		for (Player p : d.getPlayers()) {
+			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
+		}
+}
+
 }

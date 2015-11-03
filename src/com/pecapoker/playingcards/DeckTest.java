@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.pecapoker.playingcards.PcConstant.Suits;
+import com.pecapoker.playingcards.PcConst.Suits;
 
 public class DeckTest {
 
@@ -13,8 +13,8 @@ public class DeckTest {
 		Deck deck = new Deck(false);
 		assertEquals(52, deck.size());
 
-		for (Suits s : PcConstant.ALL_SUITS) {
-			for (int no = 1; no <= PcConstant.NO_KING; no++) {
+		for (Suits s : PcConst.ALL_SUITS) {
+			for (int no = 1; no <= PcConst.NO_KING; no++) {
 				Card c = deck.pop();
 				assertEquals(s, c.getSuits());
 				assertEquals(no, c.getNo());

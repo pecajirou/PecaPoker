@@ -18,7 +18,7 @@ public class DealerTest {
 		// Setup
 		//
 		TestImpDealer d = new TestImpDealer();
-		Player p = new Player(2, "testPlayer");
+		Player p = new TestImpPlayer(2, "testPlayer");
 		//
 		// Execute
 		//
@@ -38,7 +38,7 @@ public class DealerTest {
 		// Setup
 		//
 		TestImpDealer d = new TestImpDealer();
-		Player p1 = new Player(1, "jirou");
+		Player p1 = new TestImpPlayer(1, "jirou");
 		d.addPlayer(p1);
 
 		assertEquals(52, d.getDeckSize());
@@ -64,7 +64,7 @@ public class DealerTest {
 		// Setup
 		//
 		TestImpDealer d = new TestImpDealer();
-		Player p1 = new Player(1, "jirou");
+		Player p1 = new TestImpPlayer(1, "jirou");
 		d.addPlayer(p1);
 
 		assertEquals(52, d.getDeckSize());
@@ -102,8 +102,8 @@ public class DealerTest {
 		// Setup
 		//
 		TestImpDealer d = new TestImpDealer();
-		Player p1 = new Player(1, "jirou");
-		Player p2 = new Player(2, "saburou");
+		Player p1 = new TestImpPlayer(1, "jirou");
+		Player p2 = new TestImpPlayer(2, "saburou");
 		d.addPlayer(p1);
 		d.addPlayer(p2);
 
@@ -137,8 +137,8 @@ public class DealerTest {
 		// Setup
 		//
 		TestImpDealer d = new TestImpDealer();
-		Player p1 = new Player(1, "jirou");
-		Player p2 = new Player(2, "saburou");
+		Player p1 = new TestImpPlayer(1, "jirou");
+		Player p2 = new TestImpPlayer(2, "saburou");
 		d.addPlayer(p1);
 		d.addPlayer(p2);
 

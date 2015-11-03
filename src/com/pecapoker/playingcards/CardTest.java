@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.pecapoker.playingcards.PcConstant.Suits;
+import com.pecapoker.playingcards.PcConst.Suits;
 
 public class CardTest {
 

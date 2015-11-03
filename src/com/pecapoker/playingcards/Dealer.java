@@ -2,7 +2,7 @@ package com.pecapoker.playingcards;
 
 abstract public class Dealer extends Person {
 	private Deck deck;
-	private PlayerList players;
+	protected PlayerList players;
 	public Dealer () {
 		super(0, "Johnny");
 		deck = new Deck(false);

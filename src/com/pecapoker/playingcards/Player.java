@@ -1,6 +1,6 @@
 package com.pecapoker.playingcards;
 
-public class Player extends Person {
+abstract public class Player extends Person {
 	private Hand hand;
 	private int chip = 0;
 
@@ -55,4 +55,5 @@ public class Player extends Person {
 		return maxCard;
 	}
 
+	abstract public Action getRoundAction();
 }

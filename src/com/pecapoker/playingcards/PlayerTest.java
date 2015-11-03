@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.pecapoker.playingcards.PcConstant.Suits;
+import com.pecapoker.playingcards.PcConst.Suits;
 
 public class PlayerTest {
 
 	@Test
 	public void testConstructor() {
-		Player d = new Player(1, "hiyoten");
+		Player d = new TestImpPlayer(1, "hiyoten");
 		assertEquals(1, d.getId());
 		assertEquals("hiyoten", d.getName());
 	}
@@ -20,7 +20,7 @@ public class PlayerTest {
 	 */
 	@Test
 	public void testGetHighestCard() {
-		Player p = new Player(1, "hiyoten");
+		Player p = new TestImpPlayer(1, "hiyoten");
 
 		assertEquals(null, p.getHighestCard());
 

@@ -1,6 +1,6 @@
 package com.pecapoker.playingcards;
 
-import com.pecapoker.playingcards.PcConstant.Suits;
+import com.pecapoker.playingcards.PcConst.Suits;
 
 public class Card {
 	private int no;
