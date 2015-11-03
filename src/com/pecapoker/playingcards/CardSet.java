@@ -9,7 +9,7 @@ public class CardSet {
 	public CardSet() {
 	}
 
-	public int getNum(){
+	public int size(){
 		return cardList.size();
 	}
 

@@ -9,7 +9,7 @@ public class DeckTest {
 	@Test
 	public void testConstructor() {
 		Deck deck = new Deck(false);
-		assertEquals(52, deck.getNum());
+		assertEquals(52, deck.size());
 
 		for (Suits s : PcConstant.ALL_SUITS) {
 			for (int no = 1; no <= PcConstant.NO_KING; no++) {
@@ -29,7 +29,7 @@ public class DeckTest {
 		Deck deck = new Deck(false);
 		deck.shuffle();
 
-		final int NUM = deck.getNum();
+		final int NUM = deck.size();
 		Suits beforeSuits = Suits.SPADE;
 		int beforeNo = 1;
 		int diffSuits = 0;
