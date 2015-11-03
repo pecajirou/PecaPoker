@@ -7,10 +7,10 @@ import org.junit.Test;
 public class PokerDealerTest {
 
 	@Test
-	public void test() {
+	public void testConstructor() {
 		PokerDealer d = new PokerDealer();
-		assertEquals("Johnny", d.getName());
 		assertEquals(0, d.getId());
+		assertEquals("Johnny", d.getName());
 	}
 
 }
