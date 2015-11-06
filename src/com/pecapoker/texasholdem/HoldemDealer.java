@@ -57,6 +57,14 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 	}
 
+	// TODO 1.CALL額をあわせる
+	// TODO 2.Judgeを３人以上にする
+	// TODO 3.AIを変える
+	// TODO 4.AllIn
+	// TODO 5.カードが増える＝フロップに進む
+	// TODO 6.カードが増える＝ターンに進む
+	// TODO 7.カードが増える＝ターンに進む
+	// TODO 8.ペアの判定
 	public Player judgeWinner() {
 		// TODO ２人以上で判定
 		// TODO 引き分けはどちらも勝ち
@@ -134,13 +142,14 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 					continue;
 				}
 				// TODO レイズできる条件の判定
+				// TODO レイズ額の考慮　それにしたがってCALL, RAISE
 				Action ac = p.getRoundAction(roundActionRule);
+				pot.addChip(ac.getChip());
 				if (ac.isRaise()) {
 					raiser = p;
 					initRoundAction(p);
 					break;
 				}
-				pot.addChip(ac.getChip());
 				iPlayer = this.players.getNextIndex(iPlayer);
 				iActioned++;
 			}

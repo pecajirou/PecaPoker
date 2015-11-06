@@ -18,7 +18,7 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 
 	public int getRaiseAmount(HoldemRoundActionRule rar)
 	{
-		System.out.println(this + "Raise amount ? " );
+		System.out.println(this + " Raise amount ? " );
 		int amount = 0;
 
 		InputStreamReader isr = new InputStreamReader(System.in);
@@ -63,10 +63,10 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 	private int getActionNo(HoldemRoundActionRule rar) {
 		if (this.chip < rar.getMinRaiseAmount())
 		{
-			System.out.println(this + "Select action 0:FOLD 1:CALL" );
+			System.out.println(this + " Select action 0:FOLD 1:CALL" );
 		}
 		else {
-			System.out.println(this + "Select action 0:FOLD 1:CALL 2:RAISE" );
+			System.out.println(this + " Select action 0:FOLD 1:CALL 2:RAISE" );
 		}
 
 		int actionNo = AC_FOLD;
