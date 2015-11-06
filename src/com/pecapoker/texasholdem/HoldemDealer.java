@@ -116,19 +116,44 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	 * 全プレイヤーにアクションさせる
 	 */
 	public void round() throws RoundRulesException {
+		Player raiser = null;
 		while (isRounding())
 		{
-			// TODO 周回開始プレイヤーの選択
-			for(Player p : players) {
+			int iActioned = 0;
+			int iRaiser = _getPlayerIndex(raiser);
+			if (iRaiser != -1) {
+				iActioned++;
+			}
+			int iPlayer = this.players.getNextIndex(iRaiser);
+			assert iPlayer >= 0;
+
+			while(iActioned < this.players.size())
+			{
+				Player p = this.players.get(iPlayer);
+				if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.FOLDED) {
+					continue;
+				}
 				// TODO レイズできる条件の判定
 				Action ac = p.getRoundAction(roundActionRule);
 				if (ac.isRaise()) {
+					raiser = p;
 					initRoundAction(p);
 					break;
 				}
 				pot.addChip(ac.getChip());
+				iPlayer = this.players.getNextIndex(iPlayer);
+				iActioned++;
 			}
 		}
+	}
+
+	private int _getPlayerIndex(Player raiser) {
+		int iPlayer = -1;
+		if (raiser != null) {
+			iPlayer = this.players.indexOf(raiser);
+			assert iPlayer > 0;
+		}
+		return iPlayer;
 	}
 
 	public void initRound() {

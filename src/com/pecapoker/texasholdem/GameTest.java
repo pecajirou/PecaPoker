@@ -7,7 +7,7 @@ import com.pecapoker.playingcards.Player;
 public class GameTest {
 
 	@Test
-	public void test() {
+	public void testGame() {
 		System.out.println("hello texasholdem");
 
 		try {
