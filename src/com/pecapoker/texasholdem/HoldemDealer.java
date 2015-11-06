@@ -50,9 +50,18 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		return p2;
 	}
 
+	public void printAllPlayerHands() {
+		for(Player p : players) {
+			System.out.print(p + " is ");
+			p.printHand();
+		}
+	}
+
 	public Player judgeWinner() {
 		// TODO ２人以上で判定
 		// TODO 引き分けはどちらも勝ち
+		printAllPlayerHands();
+
 		Player winner = decideWinner(players.get(0), players.get(1));
 		if (winner != null) {
 			winner.receiveChip(pot.getChip());
@@ -64,13 +73,61 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 		return winner;
 	}
+
+	public boolean isRounding()
+	{
+		int called = 0;
+		int folded = 0;
+		int raised = 0;
+		for (Player p : players)
+		{
+			HoldemPlayer hp = (HoldemPlayer)p;
+			if (hp.getRoundStatus() == RoundStatus.CALLED) {
+				called++;
+			}
+			if (hp.getRoundStatus() == RoundStatus.FOLDED) {
+				folded++;
+			}
+			if (hp.getRoundStatus() == RoundStatus.RAISED) {
+				raised++;
+			}
+		}
+		return ((called + folded + raised) < players.size());
+	}
+
+	public void initRoundAction(Player raiser)
+	{
+		for(Player p : players)
+		{
+			if (p == raiser)
+			{
+				continue;
+			}
+			if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.FOLDED)
+			{
+				continue;
+			}
+			else {
+				((HoldemPlayer)p).resetRoundStatus();
+			}
+		}
+	}
 	/**
 	 * 全プレイヤーにアクションさせる
 	 */
 	public void round() throws RoundRulesException {
-		for(Player p : players) {
-			Action ac = p.getRoundAction(roundActionRule);
-			pot.addChip(ac.getChip());
+		while (isRounding())
+		{
+			// TODO 周回開始プレイヤーの選択
+			for(Player p : players) {
+				// TODO レイズできる条件の判定
+				Action ac = p.getRoundAction(roundActionRule);
+				if (ac.isRaise()) {
+					initRoundAction(p);
+					break;
+				}
+				pot.addChip(ac.getChip());
+			}
 		}
 	}
 

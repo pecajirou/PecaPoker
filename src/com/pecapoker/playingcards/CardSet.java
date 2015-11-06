@@ -13,6 +13,10 @@ public class CardSet {
 		return cardList.size();
 	}
 
+	public List<Card> getCardList(){
+		return cardList;
+	}
+
 	public Card pop() {
 		if (cardList.size() > 0)
 		{

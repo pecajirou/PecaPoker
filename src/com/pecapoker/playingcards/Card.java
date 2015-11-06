@@ -76,5 +76,46 @@ public class Card {
 		}
 		return this.getValue() - c.getValue();
 	}
+
+	@Override
+	public String toString()
+	{
+		String ret = "";
+		switch(this.suits) {
+		case CRAB:
+			ret += "♣";
+			break;
+		case DIA:
+			ret += "◆";
+			break;
+		case HEART:
+			ret += "♥";
+			break;
+		case SPADE:
+			ret += "♠";
+			break;
+		}
+		switch(this.no) {
+		case 1:
+			ret += "A";
+			break;
+		case 10:
+			ret += "T";
+			break;
+		case 11:
+			ret += "J";
+			break;
+		case 12:
+			ret += "Q";
+			break;
+		case 13:
+			ret += "K";
+			break;
+		default:
+			ret += this.no;
+			break;
+		}
+		return ret;
+	}
 }
 

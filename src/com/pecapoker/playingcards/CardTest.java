@@ -35,4 +35,22 @@ public class CardTest {
 		assertEquals(false, c1.equals(c4));
 	}
 
+	@Test
+	public void testToString()
+	{
+		Card c = new Card(Suits.SPADE, 1);
+		assertEquals("♠A", c.toString());
+		c = new Card(Suits.DIA, 13);
+		assertEquals("◆K", c.toString());
+		c = new Card(Suits.DIA, 12);
+		assertEquals("◆Q", c.toString());
+		c = new Card(Suits.DIA, 11);
+		assertEquals("◆J", c.toString());
+		c = new Card(Suits.DIA, 10);
+		assertEquals("◆T", c.toString());
+		c = new Card(Suits.DIA, 9);
+		assertEquals("◆9", c.toString());
+
+	}
+
 }

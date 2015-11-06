@@ -3,7 +3,7 @@ package com.pecapoker.playingcards;
 import com.pecapoker.texasholdem.RoundRulesException;
 
 abstract public class Player extends Person {
-	private Hand hand;
+	protected Hand hand;
 	protected int chip = 1000;
 
 	public Player(int id, String name)
@@ -43,6 +43,20 @@ abstract public class Player extends Person {
 	public int getChip()
 	{
 		return chip;
+	}
+
+	public String getHandStr()
+	{
+		String ret = "";
+		for(Card c : this.hand.getCardList())
+		{
+			ret += c.toString() + " ";
+		}
+		return ret;
+	}
+	public void printHand()
+	{
+		System.out.println(getHandStr());;
 	}
 
 	/**
