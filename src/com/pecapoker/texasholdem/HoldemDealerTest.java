@@ -104,7 +104,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Setup
 		//
-		d.initRound();
+		d.initRoundStatus(null);
 		for (Player p : d.getPlayers()) {
 			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
 		}
@@ -121,55 +121,10 @@ public class HoldemDealerTest extends TestCase {
 			assertEquals(true, RoundStatus.NONE != ((HoldemPlayer)p).getRoundStatus());
 		}
 
-		d.initRound();
+		d.initRoundStatus(null);
 		for (Player p : d.getPlayers()) {
 			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
 		}
-	}
-
-	@Test
-	public void testIsRounding() throws RoundRulesException
-	{
-		// 何もしていなければもう一周
-		assertEquals(true, d.isRounding());
-
-		// 全員コールしてたら終わり
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
-		for(Player p : d.getPlayers())
-		{
-			((HoldemPlayer)p).doCall(rar);
-		}
-
-		// 全員、コールかFoldなら終わり
-		assertEquals(false, d.isRounding());
-		for(int i = 0; i < d.getPlayers().size(); i++)
-		{
-			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
-			if (i % 2 == 0) {
-				p.doCall(rar);
-			}
-			else {
-				p.doFold();
-			}
-		}
-		assertEquals(false, d.isRounding());
-
-		// 全員、コールかFoldなら終わり
-		assertEquals(false, d.isRounding());
-		for(int i = 0; i < d.getPlayers().size(); i++)
-		{
-			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
-			if (i == 0) {
-				p.doRaise(rar, 200);
-			}
-			else if (i % 2 == 0) {
-				p.doCall(rar);
-			}
-			else {
-				p.doFold();
-			}
-		}
-		assertEquals(false, d.isRounding());
 	}
 
 	@Test
@@ -194,7 +149,7 @@ public class HoldemDealerTest extends TestCase {
 			//
 			// Execute
 			//
-			d.initRoundAction(p3);
+			d.initRoundStatus(p3);
 
 			//
 			// Verify
@@ -226,7 +181,7 @@ public class HoldemDealerTest extends TestCase {
 			//
 			// Execute
 			//
-			d.initRoundAction(p3);
+			d.initRoundStatus(p3);
 
 			//
 			// Verify

@@ -40,9 +40,6 @@ public class Game {
 					// 1ラウンド
 					//
 					{
-						// 初期化
-						d.initRound();
-
 						// 全員アクションさせる
 						d.round();
 

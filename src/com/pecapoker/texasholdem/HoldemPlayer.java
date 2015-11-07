@@ -1,7 +1,6 @@
 package com.pecapoker.texasholdem;
 
 import com.pecapoker.playingcards.Action;
-import com.pecapoker.playingcards.RoundActionRule;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
 class HoldemPlayer extends com.pecapoker.playingcards.Player {
@@ -23,12 +22,11 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 		setRoundStatus(RoundStatus.NONE);
 	}
 
-	@Override
 	/**
 	 * アクションを選択する
 	 * @return 選択したアクション
 	 */
-	public Action getRoundAction(RoundActionRule rar) throws RoundRulesException
+	public Action getRoundAction(HoldemRoundActionRule rar) throws RoundRulesException
 	{
 		if (true) {
 			return doCall((HoldemRoundActionRule)rar);

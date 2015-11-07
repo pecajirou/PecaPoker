@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import com.pecapoker.playingcards.Action;
-import com.pecapoker.playingcards.RoundActionRule;
 
 public class ConsoleHoldemPlayer extends HoldemPlayer {
 
@@ -42,7 +41,7 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 	 * アクションを選択する
 	 * @return 選択したアクション
 	 */
-	public Action getRoundAction(RoundActionRule rar) throws RoundRulesException
+	public Action getRoundAction(HoldemRoundActionRule rar) throws RoundRulesException
 	{
 		printHand();
 		int actionNo = getActionNo((HoldemRoundActionRule)rar);

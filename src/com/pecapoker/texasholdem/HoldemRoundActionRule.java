@@ -1,8 +1,6 @@
 package com.pecapoker.texasholdem;
 
-import com.pecapoker.playingcards.RoundActionRule;
-
-public class HoldemRoundActionRule extends RoundActionRule {
+public class HoldemRoundActionRule {
 	private int callAmount = 0;
 
 	public int getCallAmount() {

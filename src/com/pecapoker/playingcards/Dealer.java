@@ -10,10 +10,6 @@ abstract public class Dealer extends Person {
 	 */
 	protected PlayerList players;
 	/**
-	 * 全Playerを１周するまでのルール
-	 */
-	protected RoundActionRule roundActionRule;
-	/**
 	 * ポット
 	 */
 	protected Pot pot;
@@ -22,7 +18,6 @@ abstract public class Dealer extends Person {
 		super(0, "Johnny");
 		deck = new Deck(false);
 		players = new PlayerList();
-		roundActionRule = new RoundActionRule();
 		pot = new Pot();
 	}
 	public void shuffle() {

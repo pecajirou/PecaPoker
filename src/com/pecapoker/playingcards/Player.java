@@ -1,7 +1,5 @@
 package com.pecapoker.playingcards;
 
-import com.pecapoker.texasholdem.RoundRulesException;
-
 abstract public class Player extends Person {
 	protected Hand hand;
 	protected int chip = 1000;
@@ -75,8 +73,6 @@ abstract public class Player extends Person {
 		}
 		return maxCard;
 	}
-
-	abstract public Action getRoundAction(RoundActionRule rar) throws RoundRulesException;
 
 	/**
 	 * 現在の手札を返却してリセット

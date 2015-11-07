@@ -9,7 +9,6 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	public HoldemDealer()
 	{
 		super();
-		roundActionRule = new HoldemRoundActionRule();
 	}
 
 	@Override
@@ -63,7 +62,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	// TODO 4.AllIn
 	// TODO 5.カードが増える＝フロップに進む
 	// TODO 6.カードが増える＝ターンに進む
-	// TODO 7.カードが増える＝ターンに進む
+	// TODO 7.カードが増える＝リバーに進む
 	// TODO 8.ペアの判定
 	public Player judgeWinner() {
 		// TODO ２人以上で判定
@@ -82,28 +81,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		return winner;
 	}
 
-	public boolean isRounding()
-	{
-		int called = 0;
-		int folded = 0;
-		int raised = 0;
-		for (Player p : players)
-		{
-			HoldemPlayer hp = (HoldemPlayer)p;
-			if (hp.getRoundStatus() == RoundStatus.CALLED) {
-				called++;
-			}
-			if (hp.getRoundStatus() == RoundStatus.FOLDED) {
-				folded++;
-			}
-			if (hp.getRoundStatus() == RoundStatus.RAISED) {
-				raised++;
-			}
-		}
-		return ((called + folded + raised) < players.size());
-	}
-
-	public void initRoundAction(Player raiser)
+	public void initRoundStatus(Player raiser)
 	{
 		for(Player p : players)
 		{
@@ -124,36 +102,54 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	 * 全プレイヤーにアクションさせる
 	 */
 	public void round() throws RoundRulesException {
+		/**
+		 * 全Playerを１周するまでのルール
+		 */
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
 		Player raiser = null;
-		while (isRounding())
+		rar.setCallAmount(100);
+		do
 		{
-			int iActioned = 0;
-			int iRaiser = _getPlayerIndex(raiser);
-			if (iRaiser != -1) {
-				iActioned++;
-			}
-			int iPlayer = this.players.getNextIndex(iRaiser);
-			assert iPlayer >= 0;
+			initRoundStatus(raiser);
+			raiser = _scanPlayers(raiser, rar);
+		} while (raiser != null);
+	}
 
-			while(iActioned < this.players.size())
-			{
-				Player p = this.players.get(iPlayer);
-				if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.FOLDED) {
-					continue;
-				}
-				// TODO レイズできる条件の判定
-				// TODO レイズ額の考慮　それにしたがってCALL, RAISE
-				Action ac = p.getRoundAction(roundActionRule);
-				pot.addChip(ac.getChip());
-				if (ac.isRaise()) {
-					raiser = p;
-					initRoundAction(p);
-					break;
-				}
-				iPlayer = this.players.getNextIndex(iPlayer);
-				iActioned++;
-			}
+	/**
+	 * 新たなレイズが入るか、全員回るまで回す
+	 * @param raiser　このプレイヤーの次の人から回る
+	 * @return　レイズが入ったらそのプレイヤー
+	 * @throws RoundRulesException
+	 */
+	private Player _scanPlayers(Player raiser, HoldemRoundActionRule rar) throws RoundRulesException
+	{
+		int actionedNum = 0;
+		int iRaiser = _getPlayerIndex(raiser);
+		if (iRaiser != -1) {
+			actionedNum++;
 		}
+		int iPlayer = this.players.getNextIndex(iRaiser);
+		assert iPlayer >= 0;
+
+		while(actionedNum < this.players.size())
+		{
+			Player p = this.players.get(iPlayer);
+			if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.FOLDED) {
+				actionedNum++;
+				continue;
+			}
+			// TODO レイズできる条件の判定
+			// TODO レイズ額の考慮　それにしたがってCALL, RAISE
+			Action ac = ((HoldemPlayer)p).getRoundAction(rar);
+			pot.addChip(ac.getChip());
+			if (ac.isRaise()) {
+				raiser = p;
+				return raiser;
+			}
+			iPlayer = this.players.getNextIndex(iPlayer);
+			actionedNum++;
+		}
+		return null;
 	}
 
 	private int _getPlayerIndex(Player raiser) {
@@ -163,13 +159,6 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 			assert iPlayer > 0;
 		}
 		return iPlayer;
-	}
-
-	public void initRound() {
-		for(Player p : players) {
-			((HoldemPlayer)p).resetRoundStatus();
-		}
-		((HoldemRoundActionRule)roundActionRule).setCallAmount(100);
 	}
 
 	public void resetHand() {

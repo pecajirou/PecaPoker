@@ -6,9 +6,4 @@ public class TestImpPlayer extends Player {
 		super(id, name);
 	}
 
-	@Override
-	public Action getRoundAction(RoundActionRule rar) {
-		return null;
-	}
-
 }
