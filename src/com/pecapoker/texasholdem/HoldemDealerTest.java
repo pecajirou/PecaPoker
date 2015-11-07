@@ -127,68 +127,84 @@ public class HoldemDealerTest extends TestCase {
 		}
 	}
 
+	/**
+	 * Raise, Call をinitRoundする
+	 * @throws RoundRulesException
+	 */
 	@Test
 	public void testInitRoundAction() throws RoundRulesException
 	{
+		//
+		// Setup
+		//
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(100);
+		for(int i = 0; i < d.getPlayers().size(); i++)
 		{
-			//
-			// Setup
-			//
-			HoldemRoundActionRule rar = new HoldemRoundActionRule();
-			for(int i = 0; i < d.getPlayers().size(); i++)
-			{
-				HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
-				if (p == p3) {
-					p.doRaise(rar, 200);
-				}
-				else {
-					p.doCall(rar);
-				}
+			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
+			if (p == p3) {
+				p.doRaise(rar, 200);
 			}
-
-			//
-			// Execute
-			//
-			d.initRoundStatus(p3);
-
-			//
-			// Verify
-			//
-			assertEquals(RoundStatus.NONE, p1.getRoundStatus());
-			assertEquals(RoundStatus.NONE, p2.getRoundStatus());
-			assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
+			else {
+				p.doCall(rar);
+			}
 		}
 
+		//
+		// Execute
+		//
+		d.initRoundStatus(p3);
+
+		//
+		// Verify
+		//
+		assertEquals(RoundStatus.NONE, p1.getRoundStatus());
+		assertEquals(100, p1.getLastAction().getChip());
+		assertEquals(RoundStatus.NONE, p2.getRoundStatus());
+		assertEquals(100, p2.getLastAction().getChip());
+		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
+		assertEquals(200, p3.getLastAction().getChip());
+	}
+
+	/**
+	 * Raise, Call,Fold をinitRoundする
+	 * @throws RoundRulesException
+	 */
+	@Test
+	public void testInitRoundAction2() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(10);
+		for(int i = 0; i < d.getPlayers().size(); i++)
 		{
-			//
-			// Setup
-			//
-			HoldemRoundActionRule rar = new HoldemRoundActionRule();
-			for(int i = 0; i < d.getPlayers().size(); i++)
-			{
-				HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
-				if (p == p3) {
-					p.doRaise(rar, 200);
-				}
-				else if (p == p1) {
-					p.doFold();
-				}
-				else {
-					p.doCall(rar);
-				}
+			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
+			if (p == p3) {
+				p.doRaise(rar, 200);
 			}
-
-			//
-			// Execute
-			//
-			d.initRoundStatus(p3);
-
-			//
-			// Verify
-			//
-			assertEquals(RoundStatus.FOLDED, p1.getRoundStatus());
-			assertEquals(RoundStatus.NONE, p2.getRoundStatus());
-			assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
+			else if (p == p1) {
+				p.doFold();
+			}
+			else {
+				p.doCall(rar);
+			}
 		}
+
+		//
+		// Execute
+		//
+		d.initRoundStatus(p3);
+
+		//
+		// Verify
+		//
+		assertEquals(RoundStatus.FOLDED, p1.getRoundStatus());
+		assertEquals(0, p1.getLastAction().getChip());
+		assertEquals(RoundStatus.NONE, p2.getRoundStatus());
+		assertEquals(10, p2.getLastAction().getChip());
+		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
+		assertEquals(200, p3.getLastAction().getChip());
 	}
 }

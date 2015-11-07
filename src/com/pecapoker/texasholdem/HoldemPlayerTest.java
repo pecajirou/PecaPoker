@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import com.pecapoker.playingcards.Action;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
 public class HoldemPlayerTest {
@@ -38,11 +37,44 @@ public class HoldemPlayerTest {
 		assertEquals(900, p.getChip());
 	}
 
+	/**
+	 * コールした後、他プレイヤーがレイズしてそれをさらにコール
+	 * すると差分のチップが減る、状態がCALLEDになる
+	 */
+	@Test
+	public void testCallAfterRaise() throws RoundRulesException {
+		HoldemPlayer p = new HoldemPlayer(1, "hiyoten");
+		assertEquals(1000, p.getChip());
+		assertEquals(RoundStatus.NONE, p.getRoundStatus());
+
+		// まずコール
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(100);
+		Action ac = p.doCall(rar);
+
+		assertEquals(true, ac instanceof CallAction);
+		assertEquals(100, ac.getChip());
+
+		assertEquals(RoundStatus.CALLED, p.getRoundStatus());
+		assertEquals(900, p.getChip());
+		// 他の人が300にRaiseしたとして・・・
+		rar.setCallAmount(300);
+
+		// 追加で200分をコール
+		ac = p.doCall(rar);
+
+		assertEquals(true, ac instanceof CallAction);
+		assertEquals(300, ac.getChip());
+
+		assertEquals(RoundStatus.CALLED, p.getRoundStatus());
+		assertEquals(700, p.getChip());
+	}
+
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
 	/**
-	 * コールするとチップが減る、状態がCALLEDになる
+	 * Raiseするとチップが減る、状態がRAISEDになる
 	 */
 	@Test
 	public void testRaise() throws RoundRulesException {
@@ -55,6 +87,7 @@ public class HoldemPlayerTest {
 
 		HoldemRoundActionRule rar = new HoldemRoundActionRule();
 		rar.setCallAmount(100);
+		//200にレイズ
 		Action ac = p.doRaise(rar, 200);
 
 		assertEquals(true, ac instanceof RaiseAction);
@@ -67,8 +100,41 @@ public class HoldemPlayerTest {
 		// 所持金額以上をかけたらException
 		//
         exception.expect(RoundRulesException.class);
-        exception.expectMessage("this.chip < amount");
-        ac = p.doRaise(rar, 900);
+        exception.expectMessage("this.chip < diffAmount");
+        ac = p.doRaise(rar, 1100);
+	}
+
+	/**
+	 * コールした後、他プレイヤーがレイズしてそれをさらにレイズ
+	 * すると差分のチップが減る、状態がRAISEDになる
+	 */
+	@Test
+	public void testRaiseAfterRaise() throws RoundRulesException {
+		HoldemPlayer p = new HoldemPlayer(1, "hiyoten");
+		assertEquals(1000, p.getChip());
+		assertEquals(RoundStatus.NONE, p.getRoundStatus());
+
+		// まずコール
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(100);
+		Action ac = p.doCall(rar);
+
+		assertEquals(true, ac instanceof CallAction);
+		assertEquals(100, ac.getChip());
+
+		assertEquals(RoundStatus.CALLED, p.getRoundStatus());
+		assertEquals(900, p.getChip());
+		// 他の人が300にRaiseしたとして・・・
+		rar.setCallAmount(300);
+
+		// 追加で600にレイズ
+		ac = p.doRaise(rar, 600);
+
+		assertEquals(true, ac instanceof RaiseAction);
+		assertEquals(600, ac.getChip());
+
+		assertEquals(RoundStatus.RAISED, p.getRoundStatus());
+		assertEquals(400, p.getChip());
 	}
 
 	/**
@@ -89,5 +155,40 @@ public class HoldemPlayerTest {
 
 		assertEquals(RoundStatus.FOLDED, p.getRoundStatus());
 		assertEquals(1000, p.getChip());
+	}
+
+	/**
+	 * コールした後、他プレイヤーがレイズして,Fold
+	 * すると差分のチップは減らないが、
+	 * LastActionではコールしたぶんのChipを覚えておく
+	 * 状態がFOLDEDになる
+	 */
+	@Test
+	public void testFoldAfterRaise() throws RoundRulesException {
+		HoldemPlayer p = new HoldemPlayer(1, "hiyoten");
+		assertEquals(1000, p.getChip());
+		assertEquals(RoundStatus.NONE, p.getRoundStatus());
+
+		// まずコール
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(100);
+		Action ac = p.doCall(rar);
+
+		assertEquals(true, ac instanceof CallAction);
+		assertEquals(100, ac.getChip());
+
+		assertEquals(RoundStatus.CALLED, p.getRoundStatus());
+		assertEquals(900, p.getChip());
+		// 他の人が300にRaiseしたとして・・・
+		rar.setCallAmount(300);
+
+		// FOLD
+		ac = p.doFold();
+
+		assertEquals(true, ac instanceof FoldAction);
+		assertEquals(100, ac.getChip());
+
+		assertEquals(RoundStatus.FOLDED, p.getRoundStatus());
+		assertEquals(900, p.getChip());
 	}
 }

@@ -1,25 +1,25 @@
 package com.pecapoker.texasholdem;
 
-import com.pecapoker.playingcards.Action;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
 class HoldemPlayer extends com.pecapoker.playingcards.Player {
-	private RoundStatus roundStatus;
+	protected Action lastAction;
+
 	public HoldemPlayer(int id, String name)
 	{
 		super(id, name);
-		roundStatus = RoundStatus.NONE;
+		resetAction();
 	}
 	public RoundStatus getRoundStatus() {
-		return roundStatus;
-	}
-	protected void setRoundStatus(RoundStatus roundStatus) {
-		this.roundStatus = roundStatus;
+		return lastAction.getRoundStatus();
 	}
 
-	public void resetRoundStatus()
+	public void resetAction() {
+		this.lastAction = new NoneAction(0);
+	}
+	public void resetActionStatusOnly()
 	{
-		setRoundStatus(RoundStatus.NONE);
+		lastAction = new NoneAction(lastAction.getChip());
 	}
 
 	/**
@@ -32,38 +32,45 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 			return doCall((HoldemRoundActionRule)rar);
 		}
 		else {
-			this.setRoundStatus(RoundStatus.FOLDED);
-			return new FoldAction();
+			return doFold();
 		}
 	}
 
 	public CallAction doCall(HoldemRoundActionRule rar) throws RoundRulesException {
 		System.out.println(this + " call");
 
-		if (this.chip < rar.getCallAmount()) {
-			throw new RoundRulesException("this.chip < rar.getCallAmount()");
+		int diffAmount = rar.getCallAmount() - this.lastAction.getChip();
+		assert diffAmount >= 0;
+		if (this.chip < diffAmount) {
+			throw new RoundRulesException("this.chip < diffAmount");
 		}
-		this.setRoundStatus(RoundStatus.CALLED);
-		this.chip -= rar.getCallAmount();
-		return new CallAction(rar.getCallAmount());
+		this.chip -= diffAmount;
+		this.lastAction =  new CallAction(this.lastAction.getChip() + diffAmount);
+		return (CallAction)this.lastAction;
 	}
 
 	public RaiseAction doRaise(HoldemRoundActionRule rar, int amount) throws RoundRulesException {
 		System.out.println(this + " raise");
 
-		if (this.chip < amount) {
-			throw new RoundRulesException("this.chip < amount");
+		int diffAmount = amount - this.lastAction.getChip();
+		if (this.chip < diffAmount) {
+			throw new RoundRulesException("this.chip < diffAmount");
 		}
-		this.setRoundStatus(RoundStatus.RAISED);
-		this.chip -= amount;
-		return new RaiseAction(amount);
+		this.chip -= diffAmount;
+		this.lastAction = new RaiseAction(this.lastAction.getChip() + diffAmount);
+		return (RaiseAction)this.lastAction;
 	}
 
-	public Action doFold() {
+	public FoldAction doFold() {
 		System.out.println(this + " fold");
 
-		this.setRoundStatus(RoundStatus.FOLDED);
-		return new FoldAction();
+		this.lastAction = new FoldAction(this.lastAction.getChip());
+		return (FoldAction)this.lastAction;
 	}
+
+	public Action getLastAction() {
+		return this.lastAction;
+	}
+
 
 }

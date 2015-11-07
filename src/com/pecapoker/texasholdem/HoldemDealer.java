@@ -1,6 +1,5 @@
 package com.pecapoker.texasholdem;
 
-import com.pecapoker.playingcards.Action;
 import com.pecapoker.playingcards.Player;
 import com.pecapoker.playingcards.Pot;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
@@ -64,17 +63,17 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	// TODO 6.カードが増える＝ターンに進む
 	// TODO 7.カードが増える＝リバーに進む
 	// TODO 8.ペアの判定
-	public Player judgeWinner() {
+	public Player concludeHand(int potChip) {
 		// TODO ２人以上で判定
 		// TODO 引き分けはどちらも勝ち
 		printAllPlayerHands();
 
 		Player winner = decideWinner(players.get(0), players.get(1));
 		if (winner != null) {
-			winner.receiveChip(pot.getChip());
+			winner.receiveChip(potChip);
 		}
 		else {
-			int val = pot.getChip() / 2;
+			int val = potChip / 2;
 			players.get(0).receiveChip(val);
 			players.get(1).receiveChip(val);
 		}
@@ -94,7 +93,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 				continue;
 			}
 			else {
-				((HoldemPlayer)p).resetRoundStatus();
+				((HoldemPlayer)p).resetActionStatusOnly();
 			}
 		}
 	}
@@ -112,6 +111,9 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		{
 			initRoundStatus(raiser);
 			raiser = _scanPlayers(raiser, rar);
+			if (raiser != null) {
+				rar.setCallAmount(((HoldemPlayer)raiser).getLastAction().getChip());
+			}
 		} while (raiser != null);
 	}
 
@@ -141,10 +143,8 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 			// TODO レイズできる条件の判定
 			// TODO レイズ額の考慮　それにしたがってCALL, RAISE
 			Action ac = ((HoldemPlayer)p).getRoundAction(rar);
-			pot.addChip(ac.getChip());
 			if (ac.isRaise()) {
-				raiser = p;
-				return raiser;
+				return p;
 			}
 			iPlayer = this.players.getNextIndex(iPlayer);
 			actionedNum++;
@@ -164,8 +164,14 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	public void resetHand() {
 		for(Player p : players) {
 			p.resetHand();
+			((HoldemPlayer)p).resetAction();
 		}
-		pot = new Pot();
+	}
+
+	public void collectChipToPot(Pot pot) {
+		for(Player p : this.players) {
+			pot.addChip(((HoldemPlayer)p).getLastAction().getChip());
+		}
 	}
 
 

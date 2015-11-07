@@ -9,16 +9,11 @@ abstract public class Dealer extends Person {
 	 * 全Player
 	 */
 	protected PlayerList players;
-	/**
-	 * ポット
-	 */
-	protected Pot pot;
 
 	public Dealer () {
 		super(0, "Johnny");
 		deck = new Deck(false);
 		players = new PlayerList();
-		pot = new Pot();
 	}
 	public void shuffle() {
 		deck.shuffle();

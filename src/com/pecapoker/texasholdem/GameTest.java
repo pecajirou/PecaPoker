@@ -3,6 +3,7 @@ package com.pecapoker.texasholdem;
 import org.junit.Test;
 
 import com.pecapoker.playingcards.Player;
+import com.pecapoker.playingcards.Pot;
 
 public class GameTest {
 
@@ -34,6 +35,7 @@ public class GameTest {
 				// 1ハンド
 				//
 				{
+					Pot pot = new Pot();
 					d.resetHand();
 
 					// ２枚配る
@@ -46,9 +48,10 @@ public class GameTest {
 					{
 						// 全員アクションさせる
 						d.round();
+						d.collectChipToPot(pot);
 
 						// 勝敗判定
-						Player winner = d.judgeWinner();
+						Player winner = d.concludeHand(pot.getChip());
 						if (winner == null) {
 							System.out.println("draw");
 						}

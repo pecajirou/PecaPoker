@@ -3,8 +3,6 @@ package com.pecapoker.texasholdem;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.pecapoker.playingcards.Action;
-
 public class ConsoleHoldemPlayer extends HoldemPlayer {
 
 	private final int AC_FOLD = 0;
