@@ -72,5 +72,18 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 		return this.lastAction;
 	}
 
+	public boolean isRaised()
+	{
+		return lastAction instanceof RaiseAction;
+	}
 
+	public boolean isFolded()
+	{
+		return lastAction instanceof FoldAction;
+	}
+
+	public boolean isCalled()
+	{
+		return lastAction instanceof CallAction;
+	}
 }

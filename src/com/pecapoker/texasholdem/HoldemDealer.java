@@ -1,5 +1,8 @@
 package com.pecapoker.texasholdem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pecapoker.playingcards.Player;
 import com.pecapoker.playingcards.Pot;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
@@ -11,7 +14,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	}
 
 	@Override
-	protected Player decideWinner(Player p1, Player p2) {
+	protected Player decideWinner2players(Player p1, Player p2) {
 		// TODO 仮実装
 		if ((((HoldemPlayer)p1).getRoundStatus() == RoundStatus.FOLDED)
 			&& (((HoldemPlayer)p1).getRoundStatus() == RoundStatus.FOLDED) )
@@ -55,29 +58,65 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 	}
 
-	// TODO 1.CALL額をあわせる
-	// TODO 2.Judgeを３人以上にする
+	private int _selectWinners(List<HoldemPlayer> winners)
+	{
+		int activePlayerNum = 0;
+		for (Player pl : this.players) {
+			HoldemPlayer p = (HoldemPlayer)pl;
+			if (p.isFolded()) {
+				continue;
+			}
+			activePlayerNum++;
+			if (winners.size() == 0) {
+				winners.add(p);
+			}
+			else {
+				HoldemPlayer winner = winners.get(0);
+				winner = (HoldemPlayer)decideWinner2players(winner, p);
+				if (winner == null) {
+					winners.add(p);
+				}
+				else if (winner == p) {
+					winners.clear();
+					winners.add(p);
+				}
+				else {
+					// 何もしない
+					;
+				}
+			}
+		}
+		return activePlayerNum;
+	}
 	// TODO 3.AIを変える
 	// TODO 4.AllIn
 	// TODO 5.カードが増える＝フロップに進む
 	// TODO 6.カードが増える＝ターンに進む
 	// TODO 7.カードが増える＝リバーに進む
 	// TODO 8.ペアの判定
-	public Player concludeHand(int potChip) {
-		// TODO ２人以上で判定
-		// TODO 引き分けはどちらも勝ち
+	public List<HoldemPlayer> concludeHand(int potChip) {
 		printAllPlayerHands();
 
-		Player winner = decideWinner(players.get(0), players.get(1));
-		if (winner != null) {
-			winner.receiveChip(potChip);
+		List<HoldemPlayer> winners = new ArrayList<HoldemPlayer>();
+		int activePlayerNum = _selectWinners(winners);
+		if (winners.size() > 0) {
+			int dividedChip = potChip / winners.size();
+			for (Player p : winners) {
+				p.receiveChip(dividedChip);
+			}
 		}
+		// 引き分け
 		else {
-			int val = potChip / 2;
-			players.get(0).receiveChip(val);
-			players.get(1).receiveChip(val);
+			assert activePlayerNum > 0;
+			int dividedChip = potChip / activePlayerNum;
+			for (Player p : this.players) {
+				if (((HoldemPlayer)p).isFolded()) {
+					continue;
+				}
+				p.receiveChip(dividedChip);
+			}
 		}
-		return winner;
+		return winners;
 	}
 
 	public void initRoundStatus(Player raiser)
@@ -142,8 +181,8 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 			}
 			// TODO レイズできる条件の判定
 			// TODO レイズ額の考慮　それにしたがってCALL, RAISE
-			Action ac = ((HoldemPlayer)p).getRoundAction(rar);
-			if (ac.isRaise()) {
+			((HoldemPlayer)p).getRoundAction(rar);
+			if (((HoldemPlayer)p).isRaised()) {
 				return p;
 			}
 			iPlayer = this.players.getNextIndex(iPlayer);

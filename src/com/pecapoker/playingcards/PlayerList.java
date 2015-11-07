@@ -15,4 +15,15 @@ public class PlayerList extends ArrayList<Player> {
 			return 0;
 		}
 	}
+
+	public void printAllPlayerChips() {
+		for(Player p : this)
+		{
+			if (p != this.get(0)) {
+				System.out.print(":");
+			}
+			System.out.print(p + "=" + p.getChip());
+		}
+		System.out.println();
+	}
 }

@@ -8,11 +8,4 @@ public class RaiseAction extends Action {
 		setChip(chip);
 		this.roundStatus = RoundStatus.RAISED;
 	}
-
-	@Override
-	public boolean isRaise()
-	{
-		return true;
-	}
-
 }

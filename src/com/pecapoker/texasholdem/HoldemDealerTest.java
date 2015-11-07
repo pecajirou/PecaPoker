@@ -54,7 +54,7 @@ public class HoldemDealerTest extends TestCase {
 		// どっちもカードを持っていなければdraw
 		assertEquals(0, p1.getHandSize());
 		assertEquals(0, p2.getHandSize());
-		assertEquals(null, d.decideWinner(p1, p2));
+		assertEquals(null, d.decideWinner2players(p1, p2));
 
 	}
 
@@ -74,24 +74,24 @@ public class HoldemDealerTest extends TestCase {
 
 		Card c1 = new Card(Suits.CRAB, 2);
 		p2.receiveHand(c1);
-		assertEquals(p2, d.decideWinner(p1, p2));
+		assertEquals(p2, d.decideWinner2players(p1, p2));
 
 		Card c2 = new Card(Suits.CRAB, 3);
 		p1.receiveHand(c2);
-		assertEquals(p1, d.decideWinner(p1, p2));
+		assertEquals(p1, d.decideWinner2players(p1, p2));
 
 		//Aが一番強い
 		Card c3 = new Card(Suits.CRAB, 1);
 		p2.receiveHand(c3);
-		assertEquals(p2, d.decideWinner(p1, p2));
+		assertEquals(p2, d.decideWinner2players(p1, p2));
 
 		// 値の優劣があっても、foldしていたら負け
 		p2.doFold();
-		assertEquals(p1, d.decideWinner(p1, p2));
+		assertEquals(p1, d.decideWinner2players(p1, p2));
 
 		// 値の優劣があっても、二人ともfoldしていたら引き分け
 		p1.doFold();
-		assertEquals(null, d.decideWinner(p1, p2));
+		assertEquals(null, d.decideWinner2players(p1, p2));
 }
 
 	@Test
@@ -206,5 +206,79 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(10, p2.getLastAction().getChip());
 		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
 		assertEquals(200, p3.getLastAction().getChip());
+	}
+
+	/**
+	 * １ハンドの勝敗をテスト
+	 * @throws RoundRulesException
+	 */
+	public void testConclueHand() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(100);
+		p1.receiveHand(new Card(Suits.CRAB, 5));
+		p1.receiveHand(new Card(Suits.CRAB, 6));
+		p2.receiveHand(new Card(Suits.CRAB, 7));
+		p2.receiveHand(new Card(Suits.CRAB, 8));
+		p3.receiveHand(new Card(Suits.CRAB, 9));
+		p3.receiveHand(new Card(Suits.CRAB, 10));
+
+		for(int i = 0; i < d.getPlayers().size(); i++)
+		{
+			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
+			p.doCall(rar);
+		}
+
+		//
+		// Execute
+		//
+		d.concludeHand(300);
+
+		//
+		// Verify
+		//
+		assertEquals(900, p1.getChip());
+		assertEquals(900, p2.getChip());
+		assertEquals(1200, p3.getChip());
+	}
+
+	/**
+	 * １ハンドの勝敗をテスト
+	 * @throws RoundRulesException
+	 */
+	public void testConclueHand_draw2player() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		rar.setCallAmount(100);
+		p1.receiveHand(new Card(Suits.CRAB, 10));
+		p1.receiveHand(new Card(Suits.CRAB, 6));
+		p2.receiveHand(new Card(Suits.CRAB, 7));
+		p2.receiveHand(new Card(Suits.CRAB, 8));
+		p3.receiveHand(new Card(Suits.CRAB, 9));
+		p3.receiveHand(new Card(Suits.CRAB, 10));
+
+		for(int i = 0; i < d.getPlayers().size(); i++)
+		{
+			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
+			p.doCall(rar);
+		}
+
+		//
+		// Execute
+		//
+		d.concludeHand(300);
+
+		//
+		// Verify
+		//
+		assertEquals(1050, p1.getChip());
+		assertEquals(900, p2.getChip());
+		assertEquals(1050, p3.getChip());
 	}
 }

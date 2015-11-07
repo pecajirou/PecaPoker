@@ -65,5 +65,5 @@ abstract public class Dealer extends Person {
 	 * @param p2
 	 * @return 勝ったほうのPlayer 引き分けの場合はnull
 	 */
-	abstract protected Player decideWinner(Player p1, Player p2);
+	abstract protected Player decideWinner2players(Player p1, Player p2);
 }

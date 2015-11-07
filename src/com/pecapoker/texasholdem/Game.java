@@ -1,5 +1,7 @@
 package com.pecapoker.texasholdem;
 
+import java.util.List;
+
 import com.pecapoker.playingcards.Player;
 import com.pecapoker.playingcards.Pot;
 
@@ -9,10 +11,12 @@ public class Game {
 
 		try {
 			HoldemDealer d = new HoldemDealer();
-			HoldemPlayer cpu = new HoldemPlayer(1, "Hiyoten");
-			ConsoleHoldemPlayer human = new ConsoleHoldemPlayer(2, "Jirou");
+			HoldemPlayer cpu1 = new HoldemPlayer(1, "Hiyoten");
+			HoldemPlayer cpu2 = new HoldemPlayer(2, "saburou");
+			ConsoleHoldemPlayer human = new ConsoleHoldemPlayer(3, "Jirou");
 
-			d.addPlayer(cpu);
+			d.addPlayer(cpu1);
+			d.addPlayer(cpu2);
 			d.addPlayer(human);
 
 			// シャッフル
@@ -20,13 +24,6 @@ public class Game {
 
 			// どちらかのchipが0になるまで、または10ハンド
 			for (int i = 0; i < 3; i++) {
-				if (cpu.getChip() == 0) {
-					break;
-				}
-				if (human.getChip() == 0) {
-					break;
-				}
-
 				//
 				// 1ハンド
 				//
@@ -47,18 +44,23 @@ public class Game {
 						d.collectChipToPot(pot);
 
 						// 勝敗判定
-						Player winner = d.concludeHand(pot.getChip());
-						if (winner == null) {
+						List<HoldemPlayer> winners = d.concludeHand(pot.getChip());
+						if (winners.size() == 0) {
 							System.out.println("draw");
 						}
 						else {
-							System.out.println("winner is " + winner);
+							System.out.print("winner is ...");
+							for(Player p : winners) {
+								System.out.print(p + ", ");
+							}
+							System.out.println("");
 						}
 					}
 				}
-				System.out.println(human + "=" + human.getChip() + ":" + cpu + " =" + cpu.getChip());
+				d.getPlayers().printAllPlayerChips();
 			}
-			System.out.println("***" + human + "=" + human.getChip() + ":" + cpu + " =" + cpu.getChip());
+			System.out.print("*** ");
+			d.getPlayers().printAllPlayerChips();
 		}
 		catch( Exception ex) {
 			System.out.println("!!!Exception occured" + ex.getMessage());
