@@ -11,8 +11,8 @@ public class Game {
 
 		try {
 			HoldemDealer d = new HoldemDealer();
-			HoldemPlayer cpu1 = new HoldemPlayer(1, "Hiyoten");
-			HoldemPlayer cpu2 = new HoldemPlayer(2, "saburou");
+			HoldemPlayer cpu1 = new AiHoldemPlayer(1, "Hiyoten");
+			HoldemPlayer cpu2 = new AiHoldemPlayer(2, "saburou");
 			ConsoleHoldemPlayer human = new ConsoleHoldemPlayer(3, "Jirou");
 
 			d.addPlayer(cpu1);
@@ -28,6 +28,7 @@ public class Game {
 				// 1ハンド
 				//
 				{
+					System.out.println("##### HAND " + (i+1) + "#####");
 					Pot pot = new Pot();
 					d.resetHand();
 

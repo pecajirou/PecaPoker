@@ -120,11 +120,6 @@ public class HoldemDealerTest extends TestCase {
 		for (Player p : d.getPlayers()) {
 			assertEquals(true, RoundStatus.NONE != ((HoldemPlayer)p).getRoundStatus());
 		}
-
-		d.initRoundStatus(null);
-		for (Player p : d.getPlayers()) {
-			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
-		}
 	}
 
 	/**
@@ -137,7 +132,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Setup
 		//
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		for(int i = 0; i < d.getPlayers().size(); i++)
 		{
@@ -171,12 +166,12 @@ public class HoldemDealerTest extends TestCase {
 	 * @throws RoundRulesException
 	 */
 	@Test
-	public void testInitRoundAction2() throws RoundRulesException
+	public void testInitRoundAction_keepFold() throws RoundRulesException
 	{
 		//
 		// Setup
 		//
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(10);
 		for(int i = 0; i < d.getPlayers().size(); i++)
 		{
@@ -217,7 +212,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Setup
 		//
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		p1.receiveHand(new Card(Suits.CRAB, 5));
 		p1.receiveHand(new Card(Suits.CRAB, 6));
@@ -254,7 +249,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Setup
 		//
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		p1.receiveHand(new Card(Suits.CRAB, 10));
 		p1.receiveHand(new Card(Suits.CRAB, 6));

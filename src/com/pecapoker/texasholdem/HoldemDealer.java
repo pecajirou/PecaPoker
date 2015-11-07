@@ -143,7 +143,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		/**
 		 * 全Playerを１周するまでのルール
 		 */
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		Player raiser = null;
 		rar.setCallAmount(100);
 		do
@@ -162,7 +162,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	 * @return　レイズが入ったらそのプレイヤー
 	 * @throws RoundRulesException
 	 */
-	private Player _scanPlayers(Player raiser, HoldemRoundActionRule rar) throws RoundRulesException
+	private Player _scanPlayers(Player raiser, RoundActionRule rar) throws RoundRulesException
 	{
 		int actionedNum = 0;
 		int iRaiser = _getPlayerIndex(raiser);
@@ -176,6 +176,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		{
 			Player p = this.players.get(iPlayer);
 			if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.FOLDED) {
+				iPlayer = this.players.getNextIndex(iPlayer);
 				actionedNum++;
 				continue;
 			}
@@ -195,7 +196,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		int iPlayer = -1;
 		if (raiser != null) {
 			iPlayer = this.players.indexOf(raiser);
-			assert iPlayer > 0;
+			assert iPlayer >= 0;
 		}
 		return iPlayer;
 	}

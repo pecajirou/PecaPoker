@@ -1,6 +1,6 @@
 package com.pecapoker.texasholdem;
 
-public class HoldemRoundActionRule {
+public class RoundActionRule {
 	private int callAmount = 0;
 
 	public int getCallAmount() {

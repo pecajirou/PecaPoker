@@ -26,7 +26,7 @@ public class HoldemPlayerTest {
 		assertEquals(1000, p.getChip());
 		assertEquals(RoundStatus.NONE, p.getRoundStatus());
 
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		Action ac = p.doCall(rar);
 
@@ -48,7 +48,7 @@ public class HoldemPlayerTest {
 		assertEquals(RoundStatus.NONE, p.getRoundStatus());
 
 		// まずコール
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		Action ac = p.doCall(rar);
 
@@ -85,7 +85,7 @@ public class HoldemPlayerTest {
 		assertEquals(1000, p.getChip());
 		assertEquals(RoundStatus.NONE, p.getRoundStatus());
 
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		//200にレイズ
 		Action ac = p.doRaise(rar, 200);
@@ -115,7 +115,7 @@ public class HoldemPlayerTest {
 		assertEquals(RoundStatus.NONE, p.getRoundStatus());
 
 		// まずコール
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		Action ac = p.doCall(rar);
 
@@ -146,7 +146,7 @@ public class HoldemPlayerTest {
 		assertEquals(1000, p.getChip());
 		assertEquals(RoundStatus.NONE, p.getRoundStatus());
 
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		Action ac = p.doFold();
 
@@ -170,7 +170,7 @@ public class HoldemPlayerTest {
 		assertEquals(RoundStatus.NONE, p.getRoundStatus());
 
 		// まずコール
-		HoldemRoundActionRule rar = new HoldemRoundActionRule();
+		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		Action ac = p.doCall(rar);
 
