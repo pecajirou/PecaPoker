@@ -36,12 +36,15 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 	protected int _getActionNo(RoundActionRule rar)
 	{
 		printHand();
-		if (this.chip < rar.getMinRaiseAmount())
+		if (_isAbleToRaise(rar.getMinRaiseAmount()))
 		{
+			System.out.println(this + " Select action 0:FOLD 1:CALL 2:RAISE" );
+		}
+		else if (_isAbleToCall(rar.getCallAmount())){
 			System.out.println(this + " Select action 0:FOLD 1:CALL" );
 		}
 		else {
-			System.out.println(this + " Select action 0:FOLD 1:CALL 2:RAISE" );
+			System.out.println(this + " Select action 0:FOLD" );
 		}
 
 		int actionNo = AC_FOLD;
@@ -51,16 +54,26 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 		try {
 			String buf = br.readLine();
 			int an = Integer.parseInt(buf);
-			if (an == 2 && this.chip < rar.getMinRaiseAmount()) {
-				actionNo = AC_FOLD;
+			if (an == AC_RAISE && !_isAbleToRaise(rar.getMinRaiseAmount()))
+			{
+				an = AC_FOLD;
 			}
-			else {
-				actionNo = an;
+			else if (an == AC_CALL && !_isAbleToCall(rar.getCallAmount()))
+			{
+				an = AC_FOLD;
 			}
+			actionNo = an;
 		} catch (Exception ex)
 		{
 			;
 		}
 		return actionNo;
+	}
+
+	private boolean _isAbleToRaise(int minimumRaiseAmount) {
+		return (this.chip + this.lastAction.getChip()) >= minimumRaiseAmount;
+	}
+	private boolean _isAbleToCall(int callAmount) {
+		return (this.chip + this.lastAction.getChip()) >= callAmount;
 	}
 }

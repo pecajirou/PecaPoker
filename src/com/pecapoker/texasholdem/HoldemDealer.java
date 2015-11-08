@@ -88,7 +88,6 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 		return activePlayerNum;
 	}
-	// TODO 3.AIを変える
 	// TODO 4.AllIn
 	// TODO 5.カードが増える＝フロップに進む
 	// TODO 6.カードが増える＝ターンに進む
