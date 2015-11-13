@@ -104,7 +104,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Setup
 		//
-		d.initRoundStatus(null);
+		d.initRoundStatusAfterRaise(null);
 		for (Player p : d.getPlayers()) {
 			assertEquals(RoundStatus.NONE, ((HoldemPlayer)p).getRoundStatus());
 		}
@@ -124,10 +124,11 @@ public class HoldemDealerTest extends TestCase {
 
 	/**
 	 * Raise, Call をinitRoundする
+	 * Raiser, Foledした人、AllInした人は残る、それ以外はNoneになる
 	 * @throws RoundRulesException
 	 */
 	@Test
-	public void testInitRoundAction() throws RoundRulesException
+	public void testinitRoundStatusAfterRaise() throws RoundRulesException
 	{
 		//
 		// Setup
@@ -148,7 +149,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Execute
 		//
-		d.initRoundStatus(p3);
+		d.initRoundStatusAfterRaise(p3);
 
 		//
 		// Verify
@@ -166,7 +167,7 @@ public class HoldemDealerTest extends TestCase {
 	 * @throws RoundRulesException
 	 */
 	@Test
-	public void testInitRoundAction_keepFold() throws RoundRulesException
+	public void testinitRoundStatusAfterRaise_keepFold() throws RoundRulesException
 	{
 		//
 		// Setup
@@ -190,13 +191,55 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Execute
 		//
-		d.initRoundStatus(p3);
+		d.initRoundStatusAfterRaise(p3);
 
 		//
 		// Verify
 		//
 		assertEquals(RoundStatus.FOLDED, p1.getRoundStatus());
 		assertEquals(0, p1.getLastAction().getChip());
+		assertEquals(RoundStatus.NONE, p2.getRoundStatus());
+		assertEquals(10, p2.getLastAction().getChip());
+		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
+		assertEquals(200, p3.getLastAction().getChip());
+	}
+
+	/**
+	 * Raise, Call,Fold をinitRoundする
+	 * @throws RoundRulesException
+	 */
+	@Test
+	public void testinitRoundStatusAfterRaise_keepAllIn() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(10);
+		for(int i = 0; i < d.getPlayers().size(); i++)
+		{
+			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
+			if (p == p3) {
+				p.doRaise(rar, 200);
+			}
+			else if (p == p1) {
+				p.doAllIn(rar);
+			}
+			else {
+				p.doCall(rar);
+			}
+		}
+
+		//
+		// Execute
+		//
+		d.initRoundStatusAfterRaise(p3);
+
+		//
+		// Verify
+		//
+		assertEquals(RoundStatus.ALLINED, p1.getRoundStatus());
+		assertEquals(1000, p1.getLastAction().getChip());
 		assertEquals(RoundStatus.NONE, p2.getRoundStatus());
 		assertEquals(10, p2.getLastAction().getChip());
 		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());

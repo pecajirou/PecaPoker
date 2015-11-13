@@ -88,7 +88,8 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 		return activePlayerNum;
 	}
-	// TODO 4.AllIn
+	// TODO 4.AllIn (SidePot)
+	// TODO 4.5 Raise のルール
 	// TODO 5.カードが増える＝フロップに進む
 	// TODO 6.カードが増える＝ターンに進む
 	// TODO 7.カードが増える＝リバーに進む
@@ -118,7 +119,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		return winners;
 	}
 
-	public void initRoundStatus(Player raiser)
+	public void initRoundStatusAfterRaise(Player raiser)
 	{
 		for(Player p : players)
 		{
@@ -130,9 +131,11 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 			{
 				continue;
 			}
-			else {
-				((HoldemPlayer)p).resetActionStatusOnly();
+			if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.ALLINED)
+			{
+				continue;
 			}
+			((HoldemPlayer)p).resetActionStatusOnly();
 		}
 	}
 	/**
@@ -147,7 +150,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		rar.setCallAmount(100);
 		do
 		{
-			initRoundStatus(raiser);
+			initRoundStatusAfterRaise(raiser);
 			raiser = _scanPlayers(raiser, rar);
 			if (raiser != null) {
 				rar.setCallAmount(((HoldemPlayer)raiser).getLastAction().getChip());
@@ -179,8 +182,6 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 				actionedNum++;
 				continue;
 			}
-			// TODO レイズできる条件の判定
-			// TODO レイズ額の考慮　それにしたがってCALL, RAISE
 			((HoldemPlayer)p).getRoundAction(rar);
 			if (((HoldemPlayer)p).isRaised()) {
 				return p;

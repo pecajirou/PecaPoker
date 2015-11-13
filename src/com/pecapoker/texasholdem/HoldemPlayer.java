@@ -6,6 +6,7 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 	protected final int AC_FOLD = 0;
 	protected final int AC_CALL = 1;
 	protected final int AC_RAISE = 2;
+	protected final int AC_ALLIN = 9;
 
 	protected Action lastAction;
 
@@ -42,6 +43,10 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 			int amount = _getRaiseAmount(rar);
 			return doRaise(rar, amount);
 		}
+		else if (actionNo == AC_ALLIN)
+		{
+			return doAllIn(rar);
+		}
 		else {
 			return doFold();
 		}
@@ -70,17 +75,23 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 		return (CallAction)this.lastAction;
 	}
 
-	public RaiseAction doRaise(RoundActionRule rar, int amount) throws RoundRulesException {
+	public Action doRaise(RoundActionRule rar, int amount) throws RoundRulesException {
 
 		int diffAmount = amount - this.lastAction.getChip();
 		if (this.chip < diffAmount) {
 			throw new RoundRulesException(" this.chip < diffAmount (" + this.getChip() + " < " + diffAmount + ")");
 		}
 		this.chip -= diffAmount;
-		this.lastAction = new RaiseAction(this.lastAction.getChip() + diffAmount);
+		if (this.chip == 0) {
+			this.lastAction = new RaiseAllInAction(this.lastAction.getChip() + diffAmount);
+			System.out.println(this + " raiseAllIn make " + lastAction.getChip());
+		}
+		else {
+			this.lastAction = new RaiseAction(this.lastAction.getChip() + diffAmount);
+			System.out.println(this + " raise make " + lastAction.getChip());
+		}
 
-		System.out.println(this + " raise make " + lastAction.getChip());
-		return (RaiseAction)this.lastAction;
+		return this.lastAction;
 	}
 
 	public FoldAction doFold()
@@ -91,13 +102,31 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 		return (FoldAction)this.lastAction;
 	}
 
+	public Action doAllIn(RoundActionRule rar)
+	{
+		if (rar.getCallAmount() < this.lastAction.getChip() + this.getChip())
+		{
+			this.lastAction = new RaiseAllInAction(this.lastAction.getChip() + this.getChip());
+			System.out.println(this + " raise_allin");
+		}
+		else {
+			this.lastAction = new CallAllInAction(this.lastAction.getChip() + this.getChip());
+			System.out.println(this + " call_allin");
+		}
+
+		this.chip = 0;
+
+		return this.lastAction;
+	}
+
 	public Action getLastAction() {
 		return this.lastAction;
 	}
 
 	public boolean isRaised()
 	{
-		return lastAction instanceof RaiseAction;
+		return (lastAction instanceof RaiseAction)
+				|| (lastAction instanceof RaiseAllInAction);
 	}
 
 	public boolean isFolded()

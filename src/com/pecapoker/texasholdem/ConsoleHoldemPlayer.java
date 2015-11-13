@@ -38,10 +38,14 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 		printHand();
 		if (_isAbleToRaise(rar.getMinRaiseAmount()))
 		{
-			System.out.println(this + " Select action 0:FOLD 1:CALL 2:RAISE" );
+			System.out.println(this + " Select action 0:FOLD 1:CALL 2:RAISE 9:ALLIN" );
 		}
 		else if (_isAbleToCall(rar.getCallAmount())){
-			System.out.println(this + " Select action 0:FOLD 1:CALL" );
+			System.out.println(this + " Select action 0:FOLD 1:CALL 9:ALLIN" );
+		}
+		else if (_isAbleToAllIn())
+		{
+			System.out.println(this + " Select action 0:FOLD 9:ALLIN" );
 		}
 		else {
 			System.out.println(this + " Select action 0:FOLD" );
@@ -75,5 +79,8 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 	}
 	private boolean _isAbleToCall(int callAmount) {
 		return (this.chip + this.lastAction.getChip()) >= callAmount;
+	}
+	private boolean _isAbleToAllIn() {
+		return this.chip > 0;
 	}
 }
