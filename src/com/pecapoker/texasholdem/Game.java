@@ -1,5 +1,6 @@
 package com.pecapoker.texasholdem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.pecapoker.playingcards.Player;
@@ -29,7 +30,7 @@ public class Game {
 				//
 				{
 					System.out.println("##### HAND " + (i+1) + "#####");
-					Pot pot = new Pot();
+					List<Pot> pots = new ArrayList<Pot>();
 					d.resetHand();
 
 					// ２枚配る
@@ -42,10 +43,10 @@ public class Game {
 					{
 						// 全員アクションさせる
 						d.round();
-						d.collectChipToPot(pot);
+						d.collectChipToPot(pots);
 
 						// 勝敗判定
-						List<HoldemPlayer> winners = d.concludeHand(pot.getChip());
+						List<HoldemPlayer> winners = d.concludeHand(pots.get(0).getChip());
 						if (winners.size() == 0) {
 							System.out.println("draw");
 						}

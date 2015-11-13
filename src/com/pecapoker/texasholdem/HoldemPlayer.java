@@ -138,4 +138,5 @@ class HoldemPlayer extends com.pecapoker.playingcards.Player {
 	{
 		return lastAction instanceof CallAction;
 	}
+
 }

@@ -1,26 +1,30 @@
 package com.pecapoker.texasholdem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import com.pecapoker.playingcards.Card;
 import com.pecapoker.playingcards.PcConst.Suits;
 import com.pecapoker.playingcards.Player;
+import com.pecapoker.playingcards.Pot;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
 import junit.framework.TestCase;
 
 public class HoldemDealerTest extends TestCase {
 	HoldemDealer d;
-	HoldemPlayer p1;
-	HoldemPlayer p2;
-	HoldemPlayer p3;
+	TestHoldemPlayer p1;
+	TestHoldemPlayer p2;
+	TestHoldemPlayer p3;
 
 	public void _initPersons()
 	{
 		this.d = new HoldemDealer();
-		this.p1 = new HoldemPlayer(1, "jirou");
-		this.p2 = new HoldemPlayer(2, "saburou");
-		this.p3 = new HoldemPlayer(3, "shirou");
+		this.p1 = new TestHoldemPlayer(1, "jirou");
+		this.p2 = new TestHoldemPlayer(2, "saburou");
+		this.p3 = new TestHoldemPlayer(3, "shirou");
 		d.addPlayer(this.p1);
 		d.addPlayer(this.p2);
 		d.addPlayer(this.p3);
@@ -318,5 +322,163 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(1050, p1.getChip());
 		assertEquals(900, p2.getChip());
 		assertEquals(1050, p3.getChip());
+	}
+
+	/**
+	 * Foldしていないうち、最小のチップ額を求める
+	 * @throws RoundRulesException
+	 */
+	public void testGetMinimumChipFromAction() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		p1.SetChip(100);
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+
+		p1.doCall(rar);
+		p2.doRaise(rar, 200);
+		rar.setCallAmount(200);
+		p3.doCall(rar);
+		p1.doFold();
+
+		assertEquals(200, d.getMinimumChipFromAction(0));
+	}
+	/**
+	 * p1が100でCall, p2が200にRaise, p3が200をcall, p1がfold
+	 * →500のpotが一つ作られる
+	 * 	２人が参加する500のPot
+	 * @throws RoundRulesException
+	 */
+	public void testCollectChipToPot() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		p1.SetChip(100);
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+
+		p1.doCall(rar);
+		p2.doRaise(rar, 200);
+		rar.setCallAmount(200);
+		p3.doCall(rar);
+		p1.doFold();
+
+		List<Pot> pots = new ArrayList<Pot>();
+
+		//
+		// Execute
+		//
+		d.collectChipToPot(pots);
+
+		//
+		// Verify
+		//
+		assertEquals(1, pots.size());
+		assertEquals(500, pots.get(0).getChip());
+		assertEquals(2, pots.get(0).getPlayers().size());
+		assertEquals(p2, pots.get(0).getPlayers().get(0));
+		assertEquals(p3, pots.get(0).getPlayers().get(1));
+	}
+
+	/**
+	 * p1が100でAllIn, p2が200にRaise, p3が200をcall
+	 * →サイドポットが作られる
+	 * 	３人が参加する300のPot
+	 * 	２人が参加する200のPot
+	 * @throws RoundRulesException
+	 */
+	public void testCollectChipToPot_sidePot() throws RoundRulesException
+	{
+		p1.SetChip(100);
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+
+		p1.doAllIn(rar);
+		p2.doRaise(rar, 200);
+		rar.setCallAmount(200);
+		p3.doCall(rar);
+
+		List<Pot> pots = new ArrayList<Pot>();
+
+		//
+		// Execute
+		//
+		d.collectChipToPot(pots);
+
+		//
+		// Verify
+		//
+		assertEquals(2, pots.size());
+		assertEquals(300, pots.get(0).getChip());
+		assertEquals(3, pots.get(0).getPlayers().size());
+		assertEquals(p1, pots.get(0).getPlayers().get(0));
+		assertEquals(p2, pots.get(0).getPlayers().get(1));
+		assertEquals(p3, pots.get(0).getPlayers().get(2));
+
+		assertEquals(200, pots.get(1).getChip());
+		assertEquals(2, pots.get(1).getPlayers().size());
+		assertEquals(p2, pots.get(1).getPlayers().get(0));
+		assertEquals(p3, pots.get(1).getPlayers().get(1));
+	}
+
+	/**
+	 * p1が100でAllIn, p2が200にRaise, p3が200をcall
+	 * →サイドポットが作られる
+	 * 	３人が参加する300のPot
+	 * 	２人が参加する200のPot
+	 * @throws RoundRulesException
+	 */
+	public void testCollectChipToPot_sidePot2() throws RoundRulesException
+	{
+		HoldemPlayer p4 = new HoldemPlayer(4, "gorou");
+		HoldemPlayer p5 = new HoldemPlayer(5, "rokurou");
+		d.addPlayer(p4);
+		d.addPlayer(p5);
+
+		p1.SetChip(100);
+		p3.SetChip(200);
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+
+		p1.doAllIn(rar); // call_allin
+		p2.doCall(rar);
+		p3.doRaise(rar, 200); // call_allin
+		rar.setCallAmount(200);
+		p4.doRaise(rar, 300);
+		rar.setCallAmount(300);
+		p5.doCall(rar);
+		p2.doFold();
+
+		List<Pot> pots = new ArrayList<Pot>();
+
+		//
+		// Execute
+		//
+		d.collectChipToPot(pots);
+
+		//
+		// Verify
+		//
+		assertEquals(3, pots.size());
+		assertEquals(500, pots.get(0).getChip());
+		assertEquals(4, pots.get(0).getPlayers().size());
+		assertEquals(p1, pots.get(0).getPlayers().get(0));
+		assertEquals(p3, pots.get(0).getPlayers().get(1));
+		assertEquals(p4, pots.get(0).getPlayers().get(2));
+		assertEquals(p5, pots.get(0).getPlayers().get(3));
+
+		assertEquals(300, pots.get(1).getChip());
+		assertEquals(3, pots.get(1).getPlayers().size());
+		assertEquals(p3, pots.get(1).getPlayers().get(0));
+		assertEquals(p4, pots.get(1).getPlayers().get(1));
+		assertEquals(p5, pots.get(1).getPlayers().get(2));
+
+		assertEquals(200, pots.get(2).getChip());
+		assertEquals(2, pots.get(2).getPlayers().size());
+		assertEquals(p4, pots.get(2).getPlayers().get(0));
+		assertEquals(p5, pots.get(2).getPlayers().get(1));
 	}
 }

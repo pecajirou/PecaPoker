@@ -12,6 +12,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	{
 		super();
 	}
+	private final int NO_MIN_CHIP = 99999999;
 
 	@Override
 	protected Player decideWinner2players(Player p1, Player p2) {
@@ -88,7 +89,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 		return activePlayerNum;
 	}
-	// TODO 4.AllIn (SidePot)
+	// TODO 4.AllIn (SidePotを勝利者で分配)
 	// TODO 4.5 Raise のルール
 	// TODO 5.カードが増える＝フロップに進む
 	// TODO 6.カードが増える＝ターンに進む
@@ -208,10 +209,60 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 	}
 
-	public void collectChipToPot(Pot pot) {
-		for(Player p : this.players) {
-			pot.addChip(((HoldemPlayer)p).getLastAction().getChip());
+	public void collectChipToPot(List<Pot> pots) {
+		int beforeMinChip = 0;
+		_makePots(pots, beforeMinChip);
+	}
+
+	private void _makePots(List<Pot> pots, int beforeMinChip) {
+		// 一番安いFold以外のActionを探す
+		int minChip = getMinimumChipFromAction(beforeMinChip);
+		if (minChip == NO_MIN_CHIP) {
+			return;
 		}
+
+		Pot currentPot = new Pot();
+
+		// プレイヤーを集める
+		for(Player p : this.players) {
+			HoldemPlayer hp = (HoldemPlayer)p;
+			if (hp.getLastAction().getChip() <= beforeMinChip)
+			{
+				continue;
+			}
+			currentPot.addChip(Math.min(hp.getLastAction().getChip(), minChip - beforeMinChip));
+			if (hp.isFolded()) {
+				continue;
+			}
+			if (hp.getLastAction().getChip() < minChip)
+			{
+				continue;
+			}
+			currentPot.addPlayer(hp);
+		}
+		pots.add(currentPot);
+
+		_makePots(pots, minChip);
+	}
+
+	public int getMinimumChipFromAction(int beforeMinChip) {
+		int minChip = NO_MIN_CHIP;
+		for (Player p : this.players) {
+			HoldemPlayer hp = (HoldemPlayer)p;
+			if (hp.isFolded()) {
+				continue;
+			}
+			if ((hp.getLastAction().getChip() > beforeMinChip)
+				&& (hp.getLastAction().getChip() < minChip)
+					) {
+				minChip = hp.getLastAction().getChip();
+			}
+		}
+		return minChip;
+	}
+
+	public ArrayList<Player> getPots() {
+		return null;
 	}
 
 

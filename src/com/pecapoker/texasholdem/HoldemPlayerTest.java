@@ -284,8 +284,6 @@ public class HoldemPlayerTest {
 		assertEquals(false, p.isRaised());
 	}
 
-	//TODO keepRaiseALlIn
-
 	/**
 	 * Raiseを選び、手動で全額をベットした場合は、raiseではなくRaiseAllIn扱い
 	 * @throws RoundRulesException
