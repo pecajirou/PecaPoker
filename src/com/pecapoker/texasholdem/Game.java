@@ -15,10 +15,12 @@ public class Game {
 			HoldemPlayer cpu1 = new AiHoldemPlayer(1, "Hiyoten");
 			HoldemPlayer cpu2 = new AiHoldemPlayer(2, "saburou");
 			ConsoleHoldemPlayer human = new ConsoleHoldemPlayer(3, "Jirou");
+			ConsoleHoldemPlayer human2 = new ConsoleHoldemPlayer(4, "Shirou");
 
 			d.addPlayer(cpu1);
 			d.addPlayer(cpu2);
 			d.addPlayer(human);
+			d.addPlayer(human2);
 
 			// シャッフル
 			d.shuffle();

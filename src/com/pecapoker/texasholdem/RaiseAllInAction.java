@@ -8,5 +8,10 @@ public class RaiseAllInAction extends Action {
 		setChip(chip);
 		this.roundStatus = RoundStatus.ALLINED;
 	}
+	@Override
+	public boolean isRaise()
+	{
+		return true;
+	}
 
 }

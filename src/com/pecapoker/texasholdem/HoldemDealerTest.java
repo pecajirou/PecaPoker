@@ -325,7 +325,6 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(1050, p3.getChip());
 	}
 
-	//TODO test
 	public void testConcludeHand_sidePot() throws RoundRulesException
 	{
 		//
@@ -534,5 +533,24 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(2, pots.get(2).getPlayers().size());
 		assertEquals(p4, pots.get(2).getPlayers().get(0));
 		assertEquals(p5, pots.get(2).getPlayers().get(1));
+	}
+
+	@Test
+	public void testActionToRoundActionRule()
+	{
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+
+		Action ac = new RaiseAction(200);
+		d.actionToRoundActionRule(rar, ac);
+
+		assertEquals(200, rar.getCallAmount());
+		assertEquals(300, rar.getMinRaiseAmount());
+
+		rar.setCallAmount(100);
+		ac = new RaiseAllInAction(400);
+		d.actionToRoundActionRule(rar, ac);
+		assertEquals(400, rar.getCallAmount());
+		assertEquals(700, rar.getMinRaiseAmount());
 	}
 }

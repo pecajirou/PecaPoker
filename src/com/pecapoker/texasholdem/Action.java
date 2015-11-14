@@ -16,4 +16,9 @@ public class Action {
 	public void setChip(int chip) {
 		this.chip = chip;
 	}
+
+	public boolean isRaise()
+	{
+		return false;
+	}
 }

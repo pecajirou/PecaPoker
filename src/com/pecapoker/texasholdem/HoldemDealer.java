@@ -88,8 +88,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 		return winners;
 	}
-	// TODO 4.AllIn (SidePotを勝利者で分配)
-	// TODO 4.5 Raise のルール
+
 	// TODO 5.カードが増える＝フロップに進む
 	// TODO 6.カードが増える＝ターンに進む
 	// TODO 7.カードが増える＝リバーに進む
@@ -141,9 +140,6 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		{
 			initRoundStatusAfterRaise(raiser);
 			raiser = _scanPlayers(raiser, rar);
-			if (raiser != null) {
-				rar.setCallAmount(((HoldemPlayer)raiser).getLastAction().getChip());
-			}
 		} while (raiser != null);
 	}
 
@@ -165,20 +161,33 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 
 		while(actionedNum < this.players.size())
 		{
-			Player p = this.players.get(iPlayer);
-			if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.FOLDED) {
+			HoldemPlayer p = (HoldemPlayer)this.players.get(iPlayer);
+			if (p.getRoundStatus() == RoundStatus.FOLDED) {
 				iPlayer = this.players.getNextIndex(iPlayer);
 				actionedNum++;
 				continue;
 			}
-			((HoldemPlayer)p).getRoundAction(rar);
-			if (((HoldemPlayer)p).isRaised()) {
+			p.getRoundAction(rar);
+			actionToRoundActionRule(rar, p.getLastAction());
+			if (p.isRaised()) {
 				return p;
 			}
 			iPlayer = this.players.getNextIndex(iPlayer);
 			actionedNum++;
 		}
 		return null;
+	}
+
+	/**
+	 * アクションの結果をルール（最低ベット額）に反映
+	 * @param rar
+	 * @param p
+	 */
+	public void actionToRoundActionRule(RoundActionRule rar, Action ac) {
+		if (ac.isRaise()) {
+			rar.setLastRaiseDiffAmount(ac.getChip() - rar.getCallAmount());
+			rar.setCallAmount(ac.getChip());
+		}
 	}
 
 	private int _getPlayerIndex(Player raiser) {

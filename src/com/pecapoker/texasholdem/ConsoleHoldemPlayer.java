@@ -12,7 +12,7 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 	@Override
 	protected int _getRaiseAmount(RoundActionRule rar)
 	{
-		System.out.println(this + " Raise amount ? " );
+		System.out.println(this + " Raise amount ? (min " +  rar.getMinRaiseAmount() + ")");
 		int amount = 0;
 
 		InputStreamReader isr = new InputStreamReader(System.in);
