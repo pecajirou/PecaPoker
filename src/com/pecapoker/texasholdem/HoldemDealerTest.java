@@ -274,10 +274,11 @@ public class HoldemDealerTest extends TestCase {
 			p.doCall(rar);
 		}
 
+		List<Pot> pots = d.collectChipToPot();
 		//
 		// Execute
 		//
-		d.concludeHand(300);
+		d.concludeHand(pots.get(0));
 
 		//
 		// Verify
@@ -310,11 +311,11 @@ public class HoldemDealerTest extends TestCase {
 			HoldemPlayer p = (HoldemPlayer)d.getPlayers().get(i);
 			p.doCall(rar);
 		}
-
+		List<Pot> pots = d.collectChipToPot();
 		//
 		// Execute
 		//
-		d.concludeHand(300);
+		d.concludeHand(pots.get(0));
 
 		//
 		// Verify
@@ -324,6 +325,59 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(1050, p3.getChip());
 	}
 
+	//TODO test
+	public void testConcludeHand_sidePot() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		p1.receiveHand(new Card(Suits.CRAB, 13));
+		p1.receiveHand(new Card(Suits.CRAB, 6));
+		p2.receiveHand(new Card(Suits.CRAB, 7));
+		p2.receiveHand(new Card(Suits.CRAB, 8));
+		p3.receiveHand(new Card(Suits.CRAB, 9));
+		p3.receiveHand(new Card(Suits.CRAB, 10));
+
+		p1.SetChip(100);
+		p2.SetChip(1000);
+		p3.SetChip(1000);
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+
+		p1.doAllIn(rar);
+		p2.doRaise(rar, 200);
+		rar.setCallAmount(200);
+		p3.doCall(rar);
+
+		List<Pot> pots = d.collectChipToPot();
+
+		assertEquals(2, pots.size());
+		// 1ポット目
+		Pot pt = pots.get(0);
+		assertEquals(300, pt.getChip());
+		assertEquals(3, pt.getPlayers().size());
+		assertEquals(p1, pt.getPlayers().get(0));
+		assertEquals(p2, pt.getPlayers().get(1));
+		assertEquals(p3, pt.getPlayers().get(2));
+
+		// Execute
+		d.concludeHand(pots.get(0));
+		assertEquals(300, p1.getChip());
+		assertEquals(800, p2.getChip());
+		assertEquals(800, p3.getChip());
+
+		// 2ポット目
+		pt = pots.get(1);
+		assertEquals(200, pt.getChip());
+		assertEquals(2, pt.getPlayers().size());
+		assertEquals(p2, pt.getPlayers().get(0));
+		assertEquals(p3, pt.getPlayers().get(1));
+		// Execute
+		d.concludeHand(pots.get(1));
+		assertEquals(300, p1.getChip());
+		assertEquals(800, p2.getChip());
+		assertEquals(1000, p3.getChip());
+	}
 	/**
 	 * Foldしていないうち、最小のチップ額を求める
 	 * @throws RoundRulesException
@@ -371,7 +425,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Execute
 		//
-		d.collectChipToPot(pots);
+		pots = d.collectChipToPot();
 
 		//
 		// Verify
@@ -406,7 +460,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Execute
 		//
-		d.collectChipToPot(pots);
+		pots = d.collectChipToPot();
 
 		//
 		// Verify
@@ -457,7 +511,7 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Execute
 		//
-		d.collectChipToPot(pots);
+		pots = d.collectChipToPot();
 
 		//
 		// Verify

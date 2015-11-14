@@ -43,19 +43,24 @@ public class Game {
 					{
 						// 全員アクションさせる
 						d.round();
-						d.collectChipToPot(pots);
+						// 出されたチップからポットを作る
+						pots = d.collectChipToPot();
 
-						// 勝敗判定
-						List<HoldemPlayer> winners = d.concludeHand(pots.get(0).getChip());
-						if (winners.size() == 0) {
-							System.out.println("draw");
-						}
-						else {
-							System.out.print("winner is ...");
-							for(Player p : winners) {
-								System.out.print(p + ", ");
+						// 勝敗を判定して、チップを分配する
+						for (Pot pt : pots)
+						{
+							System.out.println("### pot " + pt.getChip());
+							List<HoldemPlayer> winners = d.concludeHand(pt);
+							if (winners.size() == 0) {
+								System.out.println("   draw");
 							}
-							System.out.println("");
+							else {
+								System.out.print("   winner is ...");
+								for(Player p : winners) {
+									System.out.print(p + ", ");
+								}
+								System.out.println("");
+							}
 						}
 					}
 				}

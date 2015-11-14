@@ -59,15 +59,14 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 	}
 
-	private int _selectWinners(List<HoldemPlayer> winners)
+	private List<HoldemPlayer> _selectWinners(List<Player> activePlayers)
 	{
-		int activePlayerNum = 0;
-		for (Player pl : this.players) {
+		List<HoldemPlayer> winners = new ArrayList<HoldemPlayer>();
+		for (Player pl : activePlayers) {
 			HoldemPlayer p = (HoldemPlayer)pl;
 			if (p.isFolded()) {
 				continue;
 			}
-			activePlayerNum++;
 			if (winners.size() == 0) {
 				winners.add(p);
 			}
@@ -87,7 +86,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 				}
 			}
 		}
-		return activePlayerNum;
+		return winners;
 	}
 	// TODO 4.AllIn (SidePotを勝利者で分配)
 	// TODO 4.5 Raise のルール
@@ -95,27 +94,16 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	// TODO 6.カードが増える＝ターンに進む
 	// TODO 7.カードが増える＝リバーに進む
 	// TODO 8.ペアの判定
-	public List<HoldemPlayer> concludeHand(int potChip) {
+	public List<HoldemPlayer> concludeHand(Pot pot)
+	{
 		printAllPlayerHands();
 
 		List<HoldemPlayer> winners = new ArrayList<HoldemPlayer>();
-		int activePlayerNum = _selectWinners(winners);
-		if (winners.size() > 0) {
-			int dividedChip = potChip / winners.size();
-			for (Player p : winners) {
-				p.receiveChip(dividedChip);
-			}
-		}
-		// 引き分け
-		else {
-			assert activePlayerNum > 0;
-			int dividedChip = potChip / activePlayerNum;
-			for (Player p : this.players) {
-				if (((HoldemPlayer)p).isFolded()) {
-					continue;
-				}
-				p.receiveChip(dividedChip);
-			}
+		winners = _selectWinners(pot.getPlayers());
+		assert winners.size() > 0;
+		int dividedChip = pot.getChip() / winners.size();
+		for (Player p : winners) {
+			p.receiveChip(dividedChip);
 		}
 		return winners;
 	}
@@ -209,9 +197,11 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 	}
 
-	public void collectChipToPot(List<Pot> pots) {
+	public List<Pot> collectChipToPot() {
+		List<Pot> pots = new ArrayList<Pot>();
 		int beforeMinChip = 0;
 		_makePots(pots, beforeMinChip);
+		return pots;
 	}
 
 	private void _makePots(List<Pot> pots, int beforeMinChip) {
