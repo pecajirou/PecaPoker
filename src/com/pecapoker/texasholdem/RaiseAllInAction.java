@@ -13,5 +13,10 @@ public class RaiseAllInAction extends Action {
 	{
 		return true;
 	}
-
+	
+	@Override
+	public boolean isAllIn()
+	{
+		return true;
+	}
 }

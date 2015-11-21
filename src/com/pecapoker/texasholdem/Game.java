@@ -3,10 +3,13 @@ package com.pecapoker.texasholdem;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pecapoker.playingcards.CardSet;
 import com.pecapoker.playingcards.Player;
 import com.pecapoker.playingcards.Pot;
 
 public class Game {
+	public enum Step {PREFLOP, FLOP, TURN, RIVER};
+
 	public static void main(String[] args) {
 		System.out.println("hello texasholdem");
 
@@ -42,27 +45,39 @@ public class Game {
 					//
 					// 1ラウンド
 					//
+					Step[] steps = {Step.PREFLOP, Step.FLOP, Step.TURN, Step.RIVER};
+					CardSet board = new CardSet();
+					for(Step s : steps)
 					{
+						d.initStep();
+						// カードを出す
+						board.addCardSet(d.dealBoard(s));
+						System.out.println("Board : " + board );
+
 						// 全員アクションさせる
 						d.round();
 						// 出されたチップからポットを作る
 						pots = d.collectChipToPot();
 
-						// 勝敗を判定して、チップを分配する
-						for (Pot pt : pots)
-						{
-							System.out.println("### pot " + pt.getChip());
-							List<HoldemPlayer> winners = d.concludeHand(pt);
-							if (winners.size() == 0) {
-								System.out.println("   draw");
+						if (d.isAllFolded()) {
+							break;
+						}
+					}
+
+					// 勝敗を判定して、チップを分配する
+					for (Pot pt : pots)
+					{
+						System.out.println("### pot " + pt.getChip());
+						List<HoldemPlayer> winners = d.concludeHand(pt);
+						if (winners.size() == 0) {
+							System.out.println("   draw");
+						}
+						else {
+							System.out.print("   winner is ...");
+							for(Player p : winners) {
+								System.out.print(p + ", ");
 							}
-							else {
-								System.out.print("   winner is ...");
-								for(Player p : winners) {
-									System.out.print(p + ", ");
-								}
-								System.out.println("");
-							}
+							System.out.println("");
 						}
 					}
 				}

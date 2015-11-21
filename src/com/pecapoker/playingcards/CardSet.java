@@ -33,9 +33,23 @@ public class CardSet {
 		cardList.add(0, c);
 	}
 
+	public void addCardSet(CardSet cs) {
+		for(Card c : cs.getCardList()) {
+			this.cardList.add(c);
+		}
+	}
 	public void shuffle() {
 		cardList.sort(new CardComparator_shuffle());
+	}
 
+	@Override
+	public String toString()
+	{
+		String str = "";
+		for(Card c : this.getCardList()) {
+			str += c;
+		}
+		return str;
 	}
 
 }

@@ -8,4 +8,10 @@ public class CallAction extends Action {
 		setChip(chip);
 		this.roundStatus = RoundStatus.CALLED;
 	}
+
+	@Override
+	public boolean isCall()
+	{
+		return true;
+	}
 }

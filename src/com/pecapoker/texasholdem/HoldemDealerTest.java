@@ -6,9 +6,11 @@ import java.util.List;
 import org.junit.Test;
 
 import com.pecapoker.playingcards.Card;
+import com.pecapoker.playingcards.CardSet;
 import com.pecapoker.playingcards.PcConst.Suits;
 import com.pecapoker.playingcards.Player;
 import com.pecapoker.playingcards.Pot;
+import com.pecapoker.texasholdem.Game.Step;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
 import junit.framework.TestCase;
@@ -553,4 +555,56 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(400, rar.getCallAmount());
 		assertEquals(700, rar.getMinRaiseAmount());
 	}
+
+	@Test
+	public void testIsAllFolded()
+	{
+		assertEquals(false, d.isAllFolded());
+
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+		p1.doAllIn(rar);
+		p2.doFold();
+		p3.doFold();
+
+		assertEquals(true, d.isAllFolded());
+	}
+
+	@Test
+	public void testDealBoard() {
+		CardSet board = new CardSet();
+		Step s = Step.PREFLOP;
+		board.addCardSet(d.dealBoard(s));
+
+		assertEquals(0, board.size());
+
+		s = Step.FLOP;
+		board.addCardSet(d.dealBoard(s));
+		assertEquals(3, board.size());
+
+		s = Step.TURN;
+		board.addCardSet(d.dealBoard(s));
+		assertEquals(4, board.size());
+
+		s = Step.RIVER;
+		board.addCardSet(d.dealBoard(s));
+		assertEquals(5, board.size());
+	}
+
+	@Test
+	public void testInitStep() throws RoundRulesException
+	{
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+		p1.doFold();
+		p2.doCall(rar);
+		p3.doAllIn(rar);
+		d.initStep();
+
+		assertEquals(RoundStatus.FOLDED, p1.getLastAction().getRoundStatus());
+		assertEquals(RoundStatus.NONE, p2.getLastAction().getRoundStatus());
+		assertEquals(RoundStatus.ALLINED, p3.getLastAction().getRoundStatus());
+
+	}
+
 }

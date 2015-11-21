@@ -8,4 +8,10 @@ public class CallAllInAction extends Action {
 		setChip(chip);
 		this.roundStatus = RoundStatus.ALLINED;
 	}
+
+	@Override
+	public boolean isAllIn()
+	{
+		return true;
+	}
 }

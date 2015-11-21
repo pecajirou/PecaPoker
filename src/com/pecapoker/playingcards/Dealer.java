@@ -32,16 +32,30 @@ abstract public class Dealer extends Person {
 
 	/**
 	 * 一人のPlayerにカードを一枚配る
-	 * @return true : 正常に配った false : カードの枚数が足りない
+	 * @throws PlayingCardException カードの枚数が足りない
 	 */
-	public boolean deal(Player p)
+	public boolean dealPlayer(Player p)
 	{
-		if (this.deck.size() == 0) {
+		Card c = this.getCardFromDeck();
+		if (c == null) {
 			return false;
 		}
-		Card c = this.deck.pop();
 		p.receiveHand(c);
 		return true;
+	}
+
+	/**
+	 * デッキからカードを一枚取り出す
+	 * @return 取り出したカード
+	 * @throws PlayingCardException
+	 */
+	public Card getCardFromDeck()
+	{
+		if (this.deck.size() == 0) {
+			return null;
+		}
+		Card c = this.deck.pop();
+		return c;
 	}
 
 	/**
@@ -54,7 +68,7 @@ abstract public class Dealer extends Person {
 		}
 		for (Player p : this.players)
 		{
-			deal(p);
+			dealPlayer(p);
 		}
 		return true;
 	}

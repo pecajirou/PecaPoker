@@ -9,4 +9,10 @@ public class FoldAction extends Action {
 		this.setChip(lastChip);
 		this.roundStatus = RoundStatus.FOLDED;
 	}
+
+	@Override
+	public boolean isFold()
+	{
+		return true;
+	}
 }

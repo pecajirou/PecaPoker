@@ -21,4 +21,16 @@ public class Action {
 	{
 		return false;
 	}
+	public boolean isFold()
+	{
+		return false;
+	}
+	public boolean isCall()
+	{
+		return false;
+	}
+	public boolean isAllIn()
+	{
+		return false;
+	}
 }

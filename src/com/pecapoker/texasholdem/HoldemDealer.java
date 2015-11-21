@@ -3,8 +3,10 @@ package com.pecapoker.texasholdem;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pecapoker.playingcards.CardSet;
 import com.pecapoker.playingcards.Player;
 import com.pecapoker.playingcards.Pot;
+import com.pecapoker.texasholdem.Game.Step;
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
 class HoldemDealer extends com.pecapoker.playingcards.Dealer {
@@ -90,9 +92,11 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	}
 
 	// TODO 5.カードが増える＝フロップに進む
-	// TODO 6.カードが増える＝ターンに進む
-	// TODO 7.カードが増える＝リバーに進む
-	// TODO 8.ペアの判定
+		// TODO フロップ以降のチップがおかしくなっている（全員Foldした場合？）
+
+	// TODO 6.ペアの判定
+	// TODO 7.カードが増える＝ターンに進む
+	// TODO 8.カードが増える＝リバーに進む
 	public List<HoldemPlayer> concludeHand(Pot pot)
 	{
 		printAllPlayerHands();
@@ -111,19 +115,20 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	{
 		for(Player p : players)
 		{
+			HoldemPlayer hp = (HoldemPlayer)p;
 			if (p == raiser)
 			{
 				continue;
 			}
-			if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.FOLDED)
+			if (hp.isFolded())
 			{
 				continue;
 			}
-			if (((HoldemPlayer)p).getRoundStatus() == RoundStatus.ALLINED)
+			if (hp.isAllIned())
 			{
 				continue;
 			}
-			((HoldemPlayer)p).resetActionStatusOnly();
+			hp.resetActionStatusOnly();
 		}
 	}
 	/**
@@ -206,6 +211,16 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		}
 	}
 
+	public void initStep() {
+		for(Player p : players) {
+			HoldemPlayer hp = (HoldemPlayer)p;
+			if (hp.isFolded() || hp.isAllIned()) {
+				continue;
+			}
+			hp.resetAction();
+		}
+	}
+
 	public List<Pot> collectChipToPot() {
 		List<Pot> pots = new ArrayList<Pot>();
 		int beforeMinChip = 0;
@@ -213,6 +228,11 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		return pots;
 	}
 
+	/**
+	 * 再帰的にサイドポットを作成する
+	 * @param pots
+	 * @param beforeMinChip
+	 */
 	private void _makePots(List<Pot> pots, int beforeMinChip) {
 		// 一番安いFold以外のActionを探す
 		int minChip = getMinimumChipFromAction(beforeMinChip);
@@ -262,6 +282,37 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 
 	public ArrayList<Player> getPots() {
 		return null;
+	}
+
+	public boolean isAllFolded() {
+		int foldedNum = 0;
+		for(Player p : this.players) {
+			HoldemPlayer hp = (HoldemPlayer)p;
+			if (hp.isFolded()) {
+				foldedNum++;
+			}
+		}
+		return foldedNum >= this.players.size()-1;
+	}
+
+	public CardSet dealBoard(Step s) {
+		CardSet cs = new CardSet();
+		switch(s) {
+		case PREFLOP:
+			break;
+		case FLOP:
+			cs.push(this.getCardFromDeck());
+			cs.push(this.getCardFromDeck());
+			cs.push(this.getCardFromDeck());
+			break;
+		case TURN:
+			cs.push(this.getCardFromDeck());
+			break;
+		case RIVER:
+			cs.push(this.getCardFromDeck());
+			break;
+		}
+		return cs;
 	}
 
 

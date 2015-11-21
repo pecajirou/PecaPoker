@@ -304,4 +304,5 @@ public class HoldemPlayerTest {
 		assertEquals(RoundStatus.ALLINED, p.getRoundStatus());
 		assertEquals(0, p.getChip());
 	}
+	
 }

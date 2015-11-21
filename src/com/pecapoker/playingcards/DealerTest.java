@@ -47,7 +47,7 @@ public class DealerTest {
 		//
 		// Execute
 		//
-		boolean ret = d.deal(p1);
+		boolean ret = d.dealPlayer(p1);
 
 		//
 		// Verify
@@ -74,7 +74,7 @@ public class DealerTest {
 		// 52回までは正常に配れる
 		//
 		for (int i = 0; i < 52; i++) {
-			boolean ret = d.deal(p1);
+			boolean ret = d.dealPlayer(p1);
 			assertEquals(true, ret);
 		}
 		assertEquals(0, d.getDeckSize());
@@ -84,7 +84,7 @@ public class DealerTest {
 		// Execute
 		// 53回目は失敗
 		//
-		boolean ret = d.deal(p1);
+		boolean ret = d.dealPlayer(p1);
 		assertEquals(false, ret);
 		assertEquals(0, d.getDeckSize());
 		assertEquals(52, p1.getHandSize());
@@ -158,7 +158,7 @@ public class DealerTest {
 		//
 		// Execute
 		//
-		d.deal(p2);
+		d.dealPlayer(p2);
 		assertEquals(1, d.getDeckSize());
 		boolean ret = d.dealAllPlayers();
 
