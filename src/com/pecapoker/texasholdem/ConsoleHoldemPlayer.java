@@ -75,10 +75,10 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 	}
 
 	private boolean _isAbleToRaise(int minimumRaiseAmount) {
-		return (this.chip + this.lastAction.getChip()) >= minimumRaiseAmount;
+		return (this.chip + this.lastStepAction.getChip()) >= minimumRaiseAmount;
 	}
 	private boolean _isAbleToCall(int callAmount) {
-		return (this.chip + this.lastAction.getChip()) >= callAmount;
+		return (this.chip + this.lastStepAction.getChip()) >= callAmount;
 	}
 	private boolean _isAbleToAllIn() {
 		return this.chip > 0;

@@ -21,9 +21,9 @@ public class Game {
 			ConsoleHoldemPlayer human2 = new ConsoleHoldemPlayer(4, "Shirou");
 
 			d.addPlayer(cpu1);
-			d.addPlayer(cpu2);
+//			d.addPlayer(cpu2);
 			d.addPlayer(human);
-			d.addPlayer(human2);
+//			d.addPlayer(human2);
 
 			// シャッフル
 			d.shuffle();
@@ -58,6 +58,7 @@ public class Game {
 						d.round();
 						// 出されたチップからポットを作る
 						pots = d.collectChipToPot();
+						_printAllPots(pots);
 
 						if (d.isAllFolded()) {
 							break;
@@ -89,6 +90,13 @@ public class Game {
 		catch( Exception ex) {
 			System.out.println("!!!Exception occured" + ex.getMessage());
 			System.out.println("!!! in " + ex.getStackTrace());
+		}
+	}
+
+	private static void _printAllPots(List<Pot> pots) {
+		for (Pot pt : pots)
+		{
+			System.out.println("### pot " + pt.getChip());
 		}
 	}
 }

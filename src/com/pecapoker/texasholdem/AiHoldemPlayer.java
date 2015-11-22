@@ -23,12 +23,12 @@ public class AiHoldemPlayer extends HoldemPlayer {
     	int actionVal = randVal + cardVal * 10;
 
     	if ((actionVal >= 200)
-    			&& (this.getChip() + this.lastAction.getChip() >= rar.getMinRaiseAmount())
+    			&& (this.getChip() + this.lastStepAction.getChip() >= rar.getMinRaiseAmount())
     			) {
     		return AC_RAISE;
     	}
     	if ((actionVal >= 100)
-    			&& (this.getChip() + this.lastAction.getChip() >= rar.getCallAmount())){
+    			&& (this.getChip() + this.lastStepAction.getChip() >= rar.getCallAmount())){
     		return AC_CALL;
     	}
 

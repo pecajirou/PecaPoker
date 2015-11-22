@@ -28,7 +28,7 @@ public class HoldemPlayerTest {
 
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
-		Action ac = p.doCall(rar);
+		StepAction ac = p.doCall(rar);
 
 		assertEquals(true, ac instanceof CallAction);
 		assertEquals(100, ac.getChip());
@@ -50,7 +50,7 @@ public class HoldemPlayerTest {
 		// まずコール
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
-		Action ac = p.doCall(rar);
+		StepAction ac = p.doCall(rar);
 
 		assertEquals(true, ac instanceof CallAction);
 		assertEquals(100, ac.getChip());
@@ -88,7 +88,7 @@ public class HoldemPlayerTest {
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 		//200にレイズ
-		Action ac = p.doRaise(rar, 200);
+		StepAction ac = p.doRaise(rar, 200);
 
 		assertEquals(true, ac instanceof RaiseAction);
 		assertEquals(200, ac.getChip());
@@ -117,7 +117,7 @@ public class HoldemPlayerTest {
 		// まずコール
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
-		Action ac = p.doCall(rar);
+		StepAction ac = p.doCall(rar);
 
 		assertEquals(true, ac instanceof CallAction);
 		assertEquals(100, ac.getChip());
@@ -146,7 +146,7 @@ public class HoldemPlayerTest {
 		assertEquals(1000, p.getChip());
 		assertEquals(RoundStatus.NONE, p.getRoundStatus());
 
-		Action ac = p.doFold();
+		StepAction ac = p.doFold();
 
 		assertEquals(true, ac instanceof FoldAction);
 		assertEquals(0, ac.getChip());
@@ -170,7 +170,7 @@ public class HoldemPlayerTest {
 		// まずコール
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
-		Action ac = p.doCall(rar);
+		StepAction ac = p.doCall(rar);
 
 		assertEquals(true, ac instanceof CallAction);
 		assertEquals(100, ac.getChip());
@@ -203,7 +203,7 @@ public class HoldemPlayerTest {
 
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
-		Action ac = p.doAllIn(rar);
+		StepAction ac = p.doAllIn(rar);
 
 		assertEquals(true, ac instanceof RaiseAllInAction);
 		assertEquals(1000, ac.getChip());
@@ -225,7 +225,7 @@ public class HoldemPlayerTest {
 
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(1000);
-		Action ac = p.doAllIn(rar);
+		StepAction ac = p.doAllIn(rar);
 
 		assertEquals(true, ac instanceof CallAllInAction);
 		assertEquals(1000, ac.getChip());
@@ -295,7 +295,7 @@ public class HoldemPlayerTest {
 		RoundActionRule rar = new RoundActionRule();
 
 		rar.setCallAmount(100);
-		Action ac = p.doRaise(rar, 1000);
+		StepAction ac = p.doRaise(rar, 1000);
 
 		assertEquals(true, p.isRaised());
 		assertEquals(true, ac instanceof RaiseAllInAction);

@@ -128,7 +128,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 			{
 				continue;
 			}
-			hp.resetActionStatusOnly();
+			hp.resetStepActionStatusOnly();
 		}
 	}
 	/**
@@ -140,7 +140,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		 */
 		RoundActionRule rar = new RoundActionRule();
 		Player raiser = null;
-		rar.setCallAmount(100);
+		rar.setCallAmount(0);
 		do
 		{
 			initRoundStatusAfterRaise(raiser);
@@ -173,7 +173,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 				continue;
 			}
 			p.getRoundAction(rar);
-			actionToRoundActionRule(rar, p.getLastAction());
+			actionToRoundActionRule(rar, p.getLastStepAction());
 			if (p.isRaised()) {
 				return p;
 			}
@@ -188,7 +188,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	 * @param rar
 	 * @param p
 	 */
-	public void actionToRoundActionRule(RoundActionRule rar, Action ac) {
+	public void actionToRoundActionRule(RoundActionRule rar, StepAction ac) {
 		if (ac.isRaise()) {
 			rar.setLastRaiseDiffAmount(ac.getChip() - rar.getCallAmount());
 			rar.setCallAmount(ac.getChip());
@@ -206,8 +206,10 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 
 	public void resetHand() {
 		for(Player p : players) {
-			p.resetHand();
-			((HoldemPlayer)p).resetAction();
+			HoldemPlayer hp = (HoldemPlayer)p;
+			hp.resetHand();
+			hp.initStepAction();
+			hp.resetHandTotalChip();
 		}
 	}
 
@@ -215,16 +217,16 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		for(Player p : players) {
 			HoldemPlayer hp = (HoldemPlayer)p;
 			if (hp.isFolded() || hp.isAllIned()) {
+				hp.resetStepActionChipOnly();
 				continue;
 			}
-			hp.resetAction();
+			hp.initStepAction();
 		}
 	}
 
 	public List<Pot> collectChipToPot() {
 		List<Pot> pots = new ArrayList<Pot>();
-		int beforeMinChip = 0;
-		_makePots(pots, beforeMinChip);
+		_makePots(pots, 0);
 		return pots;
 	}
 
@@ -235,46 +237,46 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	 */
 	private void _makePots(List<Pot> pots, int beforeMinChip) {
 		// 一番安いFold以外のActionを探す
-		int minChip = getMinimumChipFromAction(beforeMinChip);
+		int minChip = getMinimumChipFromHandTotalChip(beforeMinChip);
 		if (minChip == NO_MIN_CHIP) {
 			return;
 		}
 
 		Pot currentPot = new Pot();
 
-		// プレイヤーを集める
+		// プレイヤーのhandTotalChipからchipを集める
 		for(Player p : this.players) {
 			HoldemPlayer hp = (HoldemPlayer)p;
-			if (hp.getLastAction().getChip() <= beforeMinChip)
+			assert minChip > beforeMinChip;
+			if ((hp.getHandTotalChip() >= minChip) && !hp.isFolded())
 			{
-				continue;
+				currentPot.addPlayer(hp);
 			}
-			currentPot.addChip(Math.min(hp.getLastAction().getChip(), minChip - beforeMinChip));
-			if (hp.isFolded()) {
-				continue;
+			if (hp.getHandTotalChip() > beforeMinChip) {
+				currentPot.addChip(Math.min(hp.getHandTotalChip(), minChip) - beforeMinChip);
 			}
-			if (hp.getLastAction().getChip() < minChip)
-			{
-				continue;
-			}
-			currentPot.addPlayer(hp);
 		}
 		pots.add(currentPot);
 
 		_makePots(pots, minChip);
 	}
 
-	public int getMinimumChipFromAction(int beforeMinChip) {
+	/**
+	 * 前回作成したポットのminChipよりも大きい額の中で、最小の額を探す
+	 * @param beforeMinChip
+	 * @return
+	 */
+	public int getMinimumChipFromHandTotalChip(int beforeMinChip) {
 		int minChip = NO_MIN_CHIP;
 		for (Player p : this.players) {
 			HoldemPlayer hp = (HoldemPlayer)p;
 			if (hp.isFolded()) {
 				continue;
 			}
-			if ((hp.getLastAction().getChip() > beforeMinChip)
-				&& (hp.getLastAction().getChip() < minChip)
+			if ((hp.getHandTotalChip() > beforeMinChip)
+				&& (hp.getHandTotalChip() < minChip)
 					) {
-				minChip = hp.getLastAction().getChip();
+				minChip = hp.getHandTotalChip();
 			}
 		}
 		return minChip;

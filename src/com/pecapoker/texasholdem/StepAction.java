@@ -2,7 +2,7 @@ package com.pecapoker.texasholdem;
 
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
-public class Action {
+public class StepAction {
 	private int chip = 0;
 	protected RoundStatus roundStatus = RoundStatus.NONE;
 
@@ -13,10 +13,12 @@ public class Action {
 		return chip;
 	}
 
-	public void setChip(int chip) {
-		this.chip = chip;
+	public void addChip(int chip) {
+		this.chip += chip;
 	}
-
+	public void removeChip(int chip) {
+		this.chip -= chip;
+	}
 	public boolean isRaise()
 	{
 		return false;

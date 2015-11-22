@@ -1,7 +1,7 @@
 package com.pecapoker.texasholdem;
 
-public class NoneAction extends Action {
+public class NoneAction extends StepAction {
 	public NoneAction(int lastChip) {
-		this.setChip(lastChip);
+		this.addChip(lastChip);
 	}
 }

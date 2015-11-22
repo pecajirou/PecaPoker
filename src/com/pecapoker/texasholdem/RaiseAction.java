@@ -2,10 +2,10 @@ package com.pecapoker.texasholdem;
 
 import com.pecapoker.texasholdem.HdConst.RoundStatus;
 
-public class RaiseAction extends Action {
+public class RaiseAction extends StepAction {
 	public RaiseAction(int chip) {
 		super();
-		setChip(chip);
+		addChip(chip);
 		this.roundStatus = RoundStatus.RAISED;
 	}
 

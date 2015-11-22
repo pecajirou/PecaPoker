@@ -161,11 +161,11 @@ public class HoldemDealerTest extends TestCase {
 		// Verify
 		//
 		assertEquals(RoundStatus.NONE, p1.getRoundStatus());
-		assertEquals(100, p1.getLastAction().getChip());
+		assertEquals(100, p1.getLastStepAction().getChip());
 		assertEquals(RoundStatus.NONE, p2.getRoundStatus());
-		assertEquals(100, p2.getLastAction().getChip());
+		assertEquals(100, p2.getLastStepAction().getChip());
 		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
-		assertEquals(200, p3.getLastAction().getChip());
+		assertEquals(200, p3.getLastStepAction().getChip());
 	}
 
 	/**
@@ -203,11 +203,11 @@ public class HoldemDealerTest extends TestCase {
 		// Verify
 		//
 		assertEquals(RoundStatus.FOLDED, p1.getRoundStatus());
-		assertEquals(0, p1.getLastAction().getChip());
+		assertEquals(0, p1.getLastStepAction().getChip());
 		assertEquals(RoundStatus.NONE, p2.getRoundStatus());
-		assertEquals(10, p2.getLastAction().getChip());
+		assertEquals(10, p2.getLastStepAction().getChip());
 		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
-		assertEquals(200, p3.getLastAction().getChip());
+		assertEquals(200, p3.getLastStepAction().getChip());
 	}
 
 	/**
@@ -245,11 +245,11 @@ public class HoldemDealerTest extends TestCase {
 		// Verify
 		//
 		assertEquals(RoundStatus.ALLINED, p1.getRoundStatus());
-		assertEquals(1000, p1.getLastAction().getChip());
+		assertEquals(1000, p1.getLastStepAction().getChip());
 		assertEquals(RoundStatus.NONE, p2.getRoundStatus());
-		assertEquals(10, p2.getLastAction().getChip());
+		assertEquals(10, p2.getLastStepAction().getChip());
 		assertEquals(RoundStatus.RAISED, p3.getRoundStatus());
-		assertEquals(200, p3.getLastAction().getChip());
+		assertEquals(200, p3.getLastStepAction().getChip());
 	}
 
 	/**
@@ -398,8 +398,9 @@ public class HoldemDealerTest extends TestCase {
 		p3.doCall(rar);
 		p1.doFold();
 
-		assertEquals(200, d.getMinimumChipFromAction(0));
+		assertEquals(200, d.getMinimumChipFromHandTotalChip(0));
 	}
+
 	/**
 	 * p1が100でCall, p2が200にRaise, p3が200をcall, p1がfold
 	 * →500のpotが一つ作られる
@@ -500,7 +501,7 @@ public class HoldemDealerTest extends TestCase {
 
 		p1.doAllIn(rar); // call_allin
 		p2.doCall(rar);
-		p3.doRaise(rar, 200); // call_allin
+		p3.doRaise(rar, 200); // raise_allin
 		rar.setCallAmount(200);
 		p4.doRaise(rar, 300);
 		rar.setCallAmount(300);
@@ -537,13 +538,76 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(p5, pots.get(2).getPlayers().get(1));
 	}
 
+	/**
+	 * p1が100でCall, p2が200にRaise, p3が200をcall, p1がfold
+	 * →500のpotが一つ作られる
+	 * 	２人が参加する500のPot
+	 * →Flopで全員0bet
+	 * →500のpotが一つ作られる
+	 * @throws RoundRulesException
+	 */
+	public void testCollectChipToPot_flop() throws RoundRulesException
+	{
+		//
+		// Setup
+		//
+		p1.SetChip(100);
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+
+		p1.doCall(rar);
+		p2.doRaise(rar, 200);
+		rar.setCallAmount(200);
+		p3.doCall(rar);
+		p1.doFold();
+
+		List<Pot> pots = new ArrayList<Pot>();
+
+		//
+		// Execute
+		//
+		pots = d.collectChipToPot();
+
+		//
+		// Verify
+		//
+		assertEquals(1, pots.size());
+		assertEquals(500, pots.get(0).getChip());
+		assertEquals(2, pots.get(0).getPlayers().size());
+		assertEquals(p2, pots.get(0).getPlayers().get(0));
+		assertEquals(p3, pots.get(0).getPlayers().get(1));
+
+		//
+		// Flop
+		//
+		d.initStep();
+		rar.setCallAmount(0);
+		p2.doCall(rar);
+		p3.doCall(rar);
+
+		//
+		// Execute
+		//
+		pots = d.collectChipToPot();
+
+		//
+		// Verify
+		//
+		assertEquals(1, pots.size());
+		assertEquals(500, pots.get(0).getChip());
+		assertEquals(2, pots.get(0).getPlayers().size());
+		assertEquals(p2, pots.get(0).getPlayers().get(0));
+		assertEquals(p3, pots.get(0).getPlayers().get(1));
+
+	}
+
 	@Test
 	public void testActionToRoundActionRule()
 	{
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
 
-		Action ac = new RaiseAction(200);
+		StepAction ac = new RaiseAction(200);
 		d.actionToRoundActionRule(rar, ac);
 
 		assertEquals(200, rar.getCallAmount());
@@ -601,10 +665,31 @@ public class HoldemDealerTest extends TestCase {
 		p3.doAllIn(rar);
 		d.initStep();
 
-		assertEquals(RoundStatus.FOLDED, p1.getLastAction().getRoundStatus());
-		assertEquals(RoundStatus.NONE, p2.getLastAction().getRoundStatus());
-		assertEquals(RoundStatus.ALLINED, p3.getLastAction().getRoundStatus());
+		assertEquals(RoundStatus.FOLDED, p1.getLastStepAction().getRoundStatus());
+		assertEquals(RoundStatus.NONE, p2.getLastStepAction().getRoundStatus());
+		assertEquals(RoundStatus.ALLINED, p3.getLastStepAction().getRoundStatus());
+	}
 
+	@Test
+	public void testResetHand() throws RoundRulesException
+	{
+		d.dealAllPlayers();
+		d.dealAllPlayers();
+
+		RoundActionRule rar = new RoundActionRule();
+		rar.setCallAmount(100);
+		p1.doFold();
+		p2.doCall(rar);
+		p3.doAllIn(rar);
+
+		d.resetHand();
+		for(Player p : d.getPlayers()) {
+			HoldemPlayer hp = (HoldemPlayer)p;
+			assertEquals(RoundStatus.NONE, hp.getLastStepAction().getRoundStatus());
+			assertEquals(0, hp.getLastStepAction().getChip());
+			assertEquals(0, hp.getHandTotalChip());
+			assertEquals(0, hp.getHandSize());
+		}
 	}
 
 }
