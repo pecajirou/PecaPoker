@@ -91,9 +91,6 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		return winners;
 	}
 
-	// TODO 5.カードが増える＝フロップに進む
-		// TODO フロップ以降のチップがおかしくなっている（全員Foldした場合？）
-
 	// TODO 6.ペアの判定
 	// TODO 7.カードが増える＝ターンに進む
 	// TODO 8.カードが増える＝リバーに進む

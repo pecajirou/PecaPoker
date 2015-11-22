@@ -66,9 +66,10 @@ public class Game {
 					}
 
 					// 勝敗を判定して、チップを分配する
+					int index = 0;
 					for (Pot pt : pots)
 					{
-						System.out.println("### pot " + pt.getChip());
+						System.out.println("### pot" + index++ + " " + pt.getChip());
 						List<HoldemPlayer> winners = d.concludeHand(pt);
 						if (winners.size() == 0) {
 							System.out.println("   draw");
@@ -94,9 +95,10 @@ public class Game {
 	}
 
 	private static void _printAllPots(List<Pot> pots) {
+		int index = 0;
 		for (Pot pt : pots)
 		{
-			System.out.println("### pot " + pt.getChip());
+			System.out.println("### pot" + index++ + " " + pt.getChip());
 		}
 	}
 }
