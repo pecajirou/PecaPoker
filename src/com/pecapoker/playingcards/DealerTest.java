@@ -42,7 +42,7 @@ public class DealerTest {
 		d.addPlayer(p1);
 
 		assertEquals(52, d.getDeckSize());
-		assertEquals(0, p1.getHandSize());
+		assertEquals(0, p1.getPocketSize());
 
 		//
 		// Execute
@@ -54,7 +54,7 @@ public class DealerTest {
 		//
 		assertEquals(true, ret);
 		assertEquals(51, d.getDeckSize());
-		assertEquals(1, p1.getHandSize());
+		assertEquals(1, p1.getPocketSize());
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class DealerTest {
 		d.addPlayer(p1);
 
 		assertEquals(52, d.getDeckSize());
-		assertEquals(0, p1.getHandSize());
+		assertEquals(0, p1.getPocketSize());
 
 		//
 		// 52回までは正常に配れる
@@ -78,7 +78,7 @@ public class DealerTest {
 			assertEquals(true, ret);
 		}
 		assertEquals(0, d.getDeckSize());
-		assertEquals(52, p1.getHandSize());
+		assertEquals(52, p1.getPocketSize());
 
 		//
 		// Execute
@@ -87,7 +87,7 @@ public class DealerTest {
 		boolean ret = d.dealPlayer(p1);
 		assertEquals(false, ret);
 		assertEquals(0, d.getDeckSize());
-		assertEquals(52, p1.getHandSize());
+		assertEquals(52, p1.getPocketSize());
 
 	}
 
@@ -122,8 +122,8 @@ public class DealerTest {
 		// Verify
 		//
 		assertEquals(48, d.getDeckSize());
-		assertEquals(2, p1.getHandSize());
-		assertEquals(2, p2.getHandSize());
+		assertEquals(2, p1.getPocketSize());
+		assertEquals(2, p2.getPocketSize());
 
 	}
 
@@ -152,8 +152,8 @@ public class DealerTest {
 			assertEquals(true, ret);
 		}
 		assertEquals(2, d.getDeckSize());
-		assertEquals(25, p1.getHandSize());
-		assertEquals(25, p2.getHandSize());
+		assertEquals(25, p1.getPocketSize());
+		assertEquals(25, p2.getPocketSize());
 
 		//
 		// Execute
@@ -167,8 +167,8 @@ public class DealerTest {
 		//
 		assertEquals(false, ret);
 		assertEquals(1, d.getDeckSize());
-		assertEquals(25, p1.getHandSize());
-		assertEquals(26, p2.getHandSize());
+		assertEquals(25, p1.getPocketSize());
+		assertEquals(26, p2.getPocketSize());
 		//
 	}
 

@@ -25,15 +25,15 @@ public class PlayerTest {
 		assertEquals(null, p.getHighestCard());
 
 		Card c1 = new Card(Suits.CRAB, 7);
-		p.receiveHand(c1);
+		p.receivePocket(c1);
 		assertEquals(c1, p.getHighestCard());
 
 		Card c2 = new Card(Suits.DIA, 2);
-		p.receiveHand(c2);
+		p.receivePocket(c2);
 		assertEquals(c1, p.getHighestCard());
 
 		Card c3 = new Card(Suits.HEART, 8);
-		p.receiveHand(c3);
+		p.receivePocket(c3);
 		assertEquals(c3, p.getHighestCard());
 	}
 
@@ -45,13 +45,13 @@ public class PlayerTest {
 		Player p = new TestImpPlayer(1, "hiyoten");
 
 		Card c1 = new Card(Suits.CRAB, 7);
-		p.receiveHand(c1);
+		p.receivePocket(c1);
 		Card c2 = new Card(Suits.DIA, 2);
-		p.receiveHand(c2);
+		p.receivePocket(c2);
 
-		Hand h = p.resetHand();
+		Pocket h = p.resetPocket();
 
-		assertEquals(0, p.getHandSize());
+		assertEquals(0, p.getPocketSize());
 		assertEquals(2, h.size());
 
 	}

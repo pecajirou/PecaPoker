@@ -35,7 +35,7 @@ public class ConsoleHoldemPlayer extends HoldemPlayer {
 	@Override
 	protected int _getActionNo(RoundActionRule rar)
 	{
-		printHand();
+		printPocket();
 		if (_isAbleToRaise(rar.getMinRaiseAmount()))
 		{
 			System.out.println(this + " Select action 0:FOLD 1:CALL 2:RAISE 9:ALLIN" );

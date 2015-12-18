@@ -51,7 +51,7 @@ public class Game {
 					{
 						d.initStep();
 						// カードを出す
-						board.addCardSet(d.dealBoard(s));
+						board.mergeCardSet(d.dealBoard(s));
 						System.out.println("Board : " + board );
 
 						// 全員アクションさせる
@@ -70,7 +70,7 @@ public class Game {
 					for (Pot pt : pots)
 					{
 						System.out.println("### pot" + index++ + " " + pt.getChip());
-						List<HoldemPlayer> winners = d.concludeHand(pt);
+						List<HoldemPlayer> winners = d.concludeHand(pt, board);
 						if (winners.size() == 0) {
 							System.out.println("   draw");
 						}

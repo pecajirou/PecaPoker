@@ -31,6 +31,16 @@ public class HoldemDealerTest extends TestCase {
 		d.addPlayer(this.p2);
 		d.addPlayer(this.p3);
 	}
+	public CardSet _initBoard()
+	{
+		CardSet board = new CardSet();
+		board.push(new Card(Suits.SPADE, 2));
+		board.push(new Card(Suits.SPADE, 3));
+		board.push(new Card(Suits.SPADE, 4));
+		board.push(new Card(Suits.SPADE, 5));
+		board.push(new Card(Suits.SPADE, 6));
+		return board;
+	}
 
 	@Override
 	protected void setUp()
@@ -52,21 +62,6 @@ public class HoldemDealerTest extends TestCase {
 	@Test
 	/**
 	 * （仮実装）
-	 * 勝敗判定　引き分け
-	 */
-	public void testDecideWinner_draw() {
-		// TODO 勝敗判定は仮実装
-		// 値の大きいカードを持っているほうが勝ち
-		// どっちもカードを持っていなければdraw
-		assertEquals(0, p1.getHandSize());
-		assertEquals(0, p2.getHandSize());
-		assertEquals(null, d.decideWinner2players(p1, p2));
-
-	}
-
-	@Test
-	/**
-	 * （仮実装）
 	 * 勝敗判定　カードの値が大きい方が勝ち
 	 */
 	public void testDecideWinner() {
@@ -77,28 +72,28 @@ public class HoldemDealerTest extends TestCase {
 		HoldemPlayer p2 = new HoldemPlayer(2, "saburou");
 		d.addPlayer(p1);
 		d.addPlayer(p2);
+		CardSet board = _initBoard();
 
-		Card c1 = new Card(Suits.CRAB, 2);
-		p2.receiveHand(c1);
-		assertEquals(p2, d.decideWinner2players(p1, p2));
+		p2.receivePocket(new Card(Suits.CRAB, 8));
+		p2.receivePocket(new Card(Suits.CRAB, 7));
 
-		Card c2 = new Card(Suits.CRAB, 3);
-		p1.receiveHand(c2);
-		assertEquals(p1, d.decideWinner2players(p1, p2));
+		p1.receivePocket(new Card(Suits.DIA, 9));
+		p1.receivePocket(new Card(Suits.DIA, 8));
+		assertEquals(p1, d.decideWinner2players(p1, p2, board));
 
 		//Aが一番強い
-		Card c3 = new Card(Suits.CRAB, 1);
-		p2.receiveHand(c3);
-		assertEquals(p2, d.decideWinner2players(p1, p2));
+		p2.getPocket().pop();
+		p2.receivePocket(new Card(Suits.CRAB, 1));
+		assertEquals(p2, d.decideWinner2players(p1, p2, board));
 
 		// 値の優劣があっても、foldしていたら負け
 		p2.doFold();
-		assertEquals(p1, d.decideWinner2players(p1, p2));
+		assertEquals(p1, d.decideWinner2players(p1, p2, board));
 
 		// 値の優劣があっても、二人ともfoldしていたら引き分け
 		p1.doFold();
-		assertEquals(null, d.decideWinner2players(p1, p2));
-}
+		assertEquals(null, d.decideWinner2players(p1, p2, board));
+	}
 
 	@Test
 	/**
@@ -263,12 +258,12 @@ public class HoldemDealerTest extends TestCase {
 		//
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
-		p1.receiveHand(new Card(Suits.CRAB, 5));
-		p1.receiveHand(new Card(Suits.CRAB, 6));
-		p2.receiveHand(new Card(Suits.CRAB, 7));
-		p2.receiveHand(new Card(Suits.CRAB, 8));
-		p3.receiveHand(new Card(Suits.CRAB, 9));
-		p3.receiveHand(new Card(Suits.CRAB, 10));
+		p1.receivePocket(new Card(Suits.CRAB, 7));
+		p1.receivePocket(new Card(Suits.CRAB, 8));
+		p2.receivePocket(new Card(Suits.CRAB, 9));
+		p2.receivePocket(new Card(Suits.CRAB, 10));
+		p3.receivePocket(new Card(Suits.CRAB, 11));
+		p3.receivePocket(new Card(Suits.CRAB, 12));
 
 		for(int i = 0; i < d.getPlayers().size(); i++)
 		{
@@ -277,10 +272,11 @@ public class HoldemDealerTest extends TestCase {
 		}
 
 		List<Pot> pots = d.collectChipToPot();
+		CardSet board = _initBoard();
 		//
 		// Execute
 		//
-		d.concludeHand(pots.get(0));
+		d.concludeHand(pots.get(0), board);
 
 		//
 		// Verify
@@ -301,12 +297,12 @@ public class HoldemDealerTest extends TestCase {
 		//
 		RoundActionRule rar = new RoundActionRule();
 		rar.setCallAmount(100);
-		p1.receiveHand(new Card(Suits.CRAB, 10));
-		p1.receiveHand(new Card(Suits.CRAB, 6));
-		p2.receiveHand(new Card(Suits.CRAB, 7));
-		p2.receiveHand(new Card(Suits.CRAB, 8));
-		p3.receiveHand(new Card(Suits.CRAB, 9));
-		p3.receiveHand(new Card(Suits.CRAB, 10));
+		p1.receivePocket(new Card(Suits.CRAB, 10));
+		p1.receivePocket(new Card(Suits.CRAB, 7));
+		p2.receivePocket(new Card(Suits.DIA, 7));
+		p2.receivePocket(new Card(Suits.CRAB, 8));
+		p3.receivePocket(new Card(Suits.CRAB, 9));
+		p3.receivePocket(new Card(Suits.DIA, 10));
 
 		for(int i = 0; i < d.getPlayers().size(); i++)
 		{
@@ -314,10 +310,12 @@ public class HoldemDealerTest extends TestCase {
 			p.doCall(rar);
 		}
 		List<Pot> pots = d.collectChipToPot();
+		CardSet board = _initBoard();
+
 		//
 		// Execute
 		//
-		d.concludeHand(pots.get(0));
+		d.concludeHand(pots.get(0), board);
 
 		//
 		// Verify
@@ -332,12 +330,12 @@ public class HoldemDealerTest extends TestCase {
 		//
 		// Setup
 		//
-		p1.receiveHand(new Card(Suits.CRAB, 13));
-		p1.receiveHand(new Card(Suits.CRAB, 6));
-		p2.receiveHand(new Card(Suits.CRAB, 7));
-		p2.receiveHand(new Card(Suits.CRAB, 8));
-		p3.receiveHand(new Card(Suits.CRAB, 9));
-		p3.receiveHand(new Card(Suits.CRAB, 10));
+		p1.receivePocket(new Card(Suits.CRAB, 13));
+		p1.receivePocket(new Card(Suits.CRAB, 6));
+		p2.receivePocket(new Card(Suits.CRAB, 7));
+		p2.receivePocket(new Card(Suits.CRAB, 8));
+		p3.receivePocket(new Card(Suits.CRAB, 9));
+		p3.receivePocket(new Card(Suits.CRAB, 10));
 
 		p1.SetChip(100);
 		p2.SetChip(1000);
@@ -351,6 +349,7 @@ public class HoldemDealerTest extends TestCase {
 		p3.doCall(rar);
 
 		List<Pot> pots = d.collectChipToPot();
+		CardSet board = _initBoard();
 
 		assertEquals(2, pots.size());
 		// 1ポット目
@@ -362,7 +361,7 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(p3, pt.getPlayers().get(2));
 
 		// Execute
-		d.concludeHand(pots.get(0));
+		d.concludeHand(pots.get(0), board);
 		assertEquals(300, p1.getChip());
 		assertEquals(800, p2.getChip());
 		assertEquals(800, p3.getChip());
@@ -374,7 +373,7 @@ public class HoldemDealerTest extends TestCase {
 		assertEquals(p2, pt.getPlayers().get(0));
 		assertEquals(p3, pt.getPlayers().get(1));
 		// Execute
-		d.concludeHand(pots.get(1));
+		d.concludeHand(pots.get(1), board);
 		assertEquals(300, p1.getChip());
 		assertEquals(800, p2.getChip());
 		assertEquals(1000, p3.getChip());
@@ -638,20 +637,20 @@ public class HoldemDealerTest extends TestCase {
 	public void testDealBoard() {
 		CardSet board = new CardSet();
 		Step s = Step.PREFLOP;
-		board.addCardSet(d.dealBoard(s));
+		board.mergeCardSet(d.dealBoard(s));
 
 		assertEquals(0, board.size());
 
 		s = Step.FLOP;
-		board.addCardSet(d.dealBoard(s));
+		board.mergeCardSet(d.dealBoard(s));
 		assertEquals(3, board.size());
 
 		s = Step.TURN;
-		board.addCardSet(d.dealBoard(s));
+		board.mergeCardSet(d.dealBoard(s));
 		assertEquals(4, board.size());
 
 		s = Step.RIVER;
-		board.addCardSet(d.dealBoard(s));
+		board.mergeCardSet(d.dealBoard(s));
 		assertEquals(5, board.size());
 	}
 
@@ -688,7 +687,7 @@ public class HoldemDealerTest extends TestCase {
 			assertEquals(RoundStatus.NONE, hp.getLastStepAction().getRoundStatus());
 			assertEquals(0, hp.getLastStepAction().getChip());
 			assertEquals(0, hp.getHandTotalChip());
-			assertEquals(0, hp.getHandSize());
+			assertEquals(0, hp.getPocketSize());
 		}
 	}
 

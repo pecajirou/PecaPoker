@@ -1,7 +1,7 @@
 package com.pecapoker.playingcards;
 
 abstract public class Player extends Person {
-	protected Hand hand;
+	protected Pocket pocket;
 	protected int chip = 1000;
 
 	public Player(int id, String name)
@@ -9,24 +9,31 @@ abstract public class Player extends Person {
 		super(id, name);
 		// Playerのidは1以上　（0はディーラー)
 		assert id > 0;
-		hand = new Hand();
+		pocket = new Pocket();
 	}
 
 	/**
 	 * 手札の枚数を返す
 	 */
-	public int getHandSize() {
-		return hand.size();
+	public int getPocketSize() {
+		return pocket.size();
+	}
+
+	/**
+	 * 手札を返す
+	 */
+	public Pocket getPocket() {
+		return pocket;
 	}
 
 	/**
 	 * カードを一枚受け取り、手札に加える
 	 * @param c
 	 */
-	public void receiveHand(Card c)
+	public void receivePocket(Card c)
 	{
 		assert c != null;
-		hand.push(c);
+		pocket.push(c);
 	}
 
 	/**
@@ -43,18 +50,18 @@ abstract public class Player extends Person {
 		return chip;
 	}
 
-	public String getHandStr()
+	public String getPocketStr()
 	{
 		String ret = "";
-		for(Card c : this.hand.getCardList())
+		for(Card c : this.pocket.getCardList())
 		{
 			ret += c.toString() + " ";
 		}
 		return ret;
 	}
-	public void printHand()
+	public void printPocket()
 	{
-		System.out.println(getHandStr());;
+		System.out.println(getPocketStr());;
 	}
 
 	/**
@@ -62,25 +69,16 @@ abstract public class Player extends Person {
 	 * @return 一番大きいカード　一枚もなければnull
 	 */
 	public Card getHighestCard() {
-		Card maxCard = null;
-		for(Card c : this.hand.cardList) {
-			if (maxCard == null) {
-				maxCard = c;
-			}
-			else if (c.getValue() > maxCard.getValue()){
-				maxCard = c;
-			}
-		}
-		return maxCard;
+		return this.pocket.getHighestCard();
 	}
 
 	/**
 	 * 現在の手札を返却してリセット
 	 * @return 現在の手札
 	 */
-	public Hand resetHand() {
-		Hand ret = this.hand;
-		this.hand = new Hand();
+	public Pocket resetPocket() {
+		Pocket ret = this.pocket;
+		this.pocket = new Pocket();
 		return ret;
 	}
 

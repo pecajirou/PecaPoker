@@ -17,8 +17,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	private final int NO_MIN_CHIP = 99999999;
 
 	@Override
-	protected Player decideWinner2players(Player p1, Player p2) {
-		// TODO 仮実装
+	protected Player decideWinner2players(Player p1, Player p2, CardSet board) {
 		if ((((HoldemPlayer)p1).getRoundStatus() == RoundStatus.FOLDED)
 			&& (((HoldemPlayer)p1).getRoundStatus() == RoundStatus.FOLDED) )
 		{
@@ -33,35 +32,45 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 			return p1;
 		}
 
-		if (p1.getHighestCard() == null && p2.getHighestCard() == null)
-		{
-			return null;
-		}
-		if (p1.getHighestCard() == null)  {
-			return p2;
-		}
-		if (p2.getHighestCard() == null) {
-			return p1;
-		}
+		// 役の勝負
+		assert board.size() == 5;
+		FiveCard p1FiveCard = getMaxFiveCard(board.addCardSet(p1.getPocket()));
+		FiveCard p2FiveCard = getMaxFiveCard(board.addCardSet(p2.getPocket()));
 
-		if (p1.getHighestCard().compareTo(p2.getHighestCard()) == 0) {
+		if (p1FiveCard.compareTo(p2FiveCard) == 0) {
 			return null;
 		}
-		if (p1.getHighestCard().compareTo(p2.getHighestCard()) > 0) {
+		if (p1FiveCard.compareTo(p2FiveCard) > 0) {
 			return p1;
 		}
 
 		return p2;
 	}
 
+	public FiveCard getMaxFiveCard(CardSet allCards) {
+		assert allCards.size() == 7;
+
+		FiveCard maxFiveCard = null;
+		// 7枚のカードのうち、除く２枚を決めて、５枚分の強さを測定、最大となる５枚を返す
+		for(int i = 0; i < allCards.size() - 1; i++) {
+			for(int j = i + 1; j < allCards.size(); j++) {
+				FiveCard currentFiveCard = allCards.getFiveCardExcept(i, j);
+				if ((maxFiveCard == null) || (currentFiveCard.compareTo(maxFiveCard) > 0)) {
+					maxFiveCard = currentFiveCard;
+				}
+			}
+		}
+		return maxFiveCard;
+	}
+
 	public void printAllPlayerHands() {
 		for(Player p : players) {
 			System.out.print(p + " is ");
-			p.printHand();
+			p.printPocket();
 		}
 	}
 
-	private List<HoldemPlayer> _selectWinners(List<Player> activePlayers)
+	private List<HoldemPlayer> _selectWinners(List<Player> activePlayers, CardSet board)
 	{
 		List<HoldemPlayer> winners = new ArrayList<HoldemPlayer>();
 		for (Player pl : activePlayers) {
@@ -74,7 +83,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 			}
 			else {
 				HoldemPlayer winner = winners.get(0);
-				winner = (HoldemPlayer)decideWinner2players(winner, p);
+				winner = (HoldemPlayer)decideWinner2players(winner, p, board);
 				if (winner == null) {
 					winners.add(p);
 				}
@@ -92,14 +101,17 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	}
 
 	// TODO 6.ペアの判定
-	// TODO 7.カードが増える＝ターンに進む
-	// TODO 8.カードが増える＝リバーに進む
-	public List<HoldemPlayer> concludeHand(Pot pot)
+	// TODO 7.ストレート、フラッシュ他の役
+	// TODO 8.button
+	// TODO 9.ブラインド
+	// TODO 10.Structure
+	// TODO 11.トーナメント
+	public List<HoldemPlayer> concludeHand(Pot pot, CardSet board)
 	{
 		printAllPlayerHands();
 
 		List<HoldemPlayer> winners = new ArrayList<HoldemPlayer>();
-		winners = _selectWinners(pot.getPlayers());
+		winners = _selectWinners(pot.getPlayers(), board);
 		assert winners.size() > 0;
 		int dividedChip = pot.getChip() / winners.size();
 		for (Player p : winners) {
@@ -204,7 +216,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 	public void resetHand() {
 		for(Player p : players) {
 			HoldemPlayer hp = (HoldemPlayer)p;
-			hp.resetHand();
+			hp.resetPocket();
 			hp.initStepAction();
 			hp.resetHandTotalChip();
 		}
