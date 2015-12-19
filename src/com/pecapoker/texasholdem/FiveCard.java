@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.pecapoker.playingcards.Card;
 import com.pecapoker.playingcards.CardSet;
+import com.pecapoker.playingcards.RankCount;
 
 public class FiveCard extends CardSet {
 
@@ -20,52 +21,53 @@ public class FiveCard extends CardSet {
 		yaku = _calcYaku();
 	}
 	private Yaku _calcYaku() {
-		List<Integer> pairRankList = _getPairRankList();
-		if (pairRankList.size() >= 2) {
-			return new YkTwoPair(this, pairRankList.get(0), pairRankList.get(1));
+		List<RankCount> rankCountList = _getRankCountList();
+		if (rankCountList.size() >= 1 && rankCountList.get(0).count >= 4) {
+			return new YkFourOfAKind(this, rankCountList.get(0).rank);
 		}
-		else if (pairRankList.size() >= 1) {
-			return new YkPair(this, pairRankList.get(0));
+		if (rankCountList.size() >= 2 &&
+				(rankCountList.get(0).count >= 3 || rankCountList.get(1).count >= 3)) {
+			int trioRank, pairRank;
+			if (rankCountList.get(0).count >= 3) {
+				trioRank = rankCountList.get(0).rank;
+				pairRank = rankCountList.get(1).rank;
+			}
+			else {
+				trioRank = rankCountList.get(1).rank;
+				pairRank = rankCountList.get(0).rank;
+			}
+			return new YkFullHouse(this, trioRank, pairRank);
+		}
+		if (rankCountList.size() >= 1 && rankCountList.get(0).count >= 3) {
+			return new YkThreeOfAKind(this, rankCountList.get(0).rank);
+		}
+		if (rankCountList.size() >= 2) {
+			return new YkTwoPair(this, rankCountList.get(0).rank, rankCountList.get(1).rank);
+		}
+		if (rankCountList.size() >= 1) {
+			return new YkPair(this, rankCountList.get(0).rank);
 		}
 		return new Yaku(this);
 	}
 
 	/**
-	 * はじめに見つけたペアを返す
+	 * ランク毎に枚数を数える
 	 * @return
 	 */
-	private int _getPairRank() {
-		int noArray[] = new int[14];
+	private List<RankCount> _getRankCountList() {
+		List<RankCount> rankCountList = new ArrayList<RankCount>();
+
+		int rankArray[] = new int[14];
 		for(Card c : this.getCardList())
 		{
-			noArray[c.getRank()]++;
+			rankArray[c.getRank()]++;
 		}
-		for(int i = 1 ; i < noArray.length; i++) {
-			if (noArray[i] >= 2) {
-				return i;
+		for(int i = 1 ; i < rankArray.length; i++) {
+			if (rankArray[i] >= 2) {
+				rankCountList.add(new RankCount(i, rankArray[i]));
 			}
 		}
-		return 0;
-	}
-
-	/**
-	 * 見つけたペアのリストを返す
-	 * @return
-	 */
-	private List<Integer> _getPairRankList() {
-		List<Integer> pairList = new ArrayList<Integer>();
-
-		int noArray[] = new int[14];
-		for(Card c : this.getCardList())
-		{
-			noArray[c.getRank()]++;
-		}
-		for(int i = 1 ; i < noArray.length; i++) {
-			if (noArray[i] >= 2) {
-				pairList.add(i);
-			}
-		}
-		return pairList;
+		return rankCountList;
 	}
 
 	public Yaku getYaku() {
