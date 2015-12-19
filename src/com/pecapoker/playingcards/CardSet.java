@@ -11,6 +11,17 @@ public class CardSet {
 	public CardSet() {
 	}
 
+	public CardSet(String str) {
+		assert str.length() == 7*2;
+		this.add(new Card(str.substring(0, 2)));
+		this.add(new Card(str.substring(2, 4)));
+		this.add(new Card(str.substring(4, 6)));
+		this.add(new Card(str.substring(6, 8)));
+		this.add(new Card(str.substring(8, 10)));
+		this.add(new Card(str.substring(10, 12)));
+		this.add(new Card(str.substring(12, 14)));
+	}
+
 	public int size(){
 		return cardList.size();
 	}
@@ -33,6 +44,9 @@ public class CardSet {
 
 	public void push(Card c) {
 		cardList.add(0, c);
+	}
+	public void add(Card c) {
+		cardList.add(cardList.size(), c);
 	}
 
 	/**
@@ -155,6 +169,10 @@ public class CardSet {
 			return this.getCardList().get(i).getValue() - other.getCardList().get(i).getValue();
 		}
 		return 0;
+	}
+
+	public Card get(int i) {
+		return this.getCardList().get(i);
 	}
 
 }

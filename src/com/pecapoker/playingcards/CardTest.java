@@ -64,4 +64,18 @@ public class CardTest {
 		c2 = new Card(Suits.DIA, 10);
 		assertEquals(true, c1.compareTo(c2) > 0);
 	}
+
+	@Test
+	public void testConstructor_string()
+	{
+		Card c = new Card("SA");
+		assertEquals(Suits.SPADE, c.getSuits());
+		assertEquals(1, c.getRank());
+		c = new Card("C2");
+		assertEquals(Suits.CRAB, c.getSuits());
+		assertEquals(2, c.getRank());
+		c = new Card("C1");
+		assertEquals(Suits.CRAB, c.getSuits());
+		assertEquals(1, c.getRank());
+	}
 }

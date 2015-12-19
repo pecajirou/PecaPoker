@@ -692,4 +692,12 @@ public class HoldemDealerTest extends TestCase {
 		}
 	}
 
+	@Test
+	public void testGetMaxFiveCard()
+	{
+		CardSet cs = new CardSet("STH4S5S6HTH8S4");
+		FiveCard fv = d.getMaxFiveCard(cs);
+		assertEquals(true, fv.getYaku() instanceof YkTwoPair);
+
+	}
 }

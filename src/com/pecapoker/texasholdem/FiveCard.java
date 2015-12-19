@@ -20,6 +20,9 @@ public class FiveCard extends CardSet {
 		this.push(c1);
 		yaku = _calcYaku();
 	}
+	public FiveCard(CardSet cs) {
+		this(cs.get(0),cs.get(1),cs.get(2),cs.get(3),cs.get(4));
+	}
 	private Yaku _calcYaku() {
 		List<RankCount> rankCountList = _getRankCountList();
 		if (rankCountList.size() >= 1 && rankCountList.get(0).count >= 4) {

@@ -159,5 +159,14 @@ public class CardSetTest {
 		assertEquals(true, cs1.compareTo(cs2) > 0);
 		assertEquals(true, cs2.compareTo(cs1) < 0);
 	}
-
+	@Test
+	public void testConstructor_string()
+	{
+		CardSet cs = new CardSet("STH4S5S6HTH8S4");
+		assertEquals(7, cs.size());
+		assertEquals(Suits.SPADE, cs.get(0).getSuits());
+		assertEquals(10, cs.get(0).getRank());
+		assertEquals(Suits.SPADE, cs.get(6).getSuits());
+		assertEquals(4, cs.get(6).getRank());
+	}
 }

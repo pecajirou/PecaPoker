@@ -55,7 +55,7 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		for(int i = 0; i < allCards.size() - 1; i++) {
 			for(int j = i + 1; j < allCards.size(); j++) {
 				FiveCard currentFiveCard = allCards.getFiveCardExcept(i, j);
-				if ((maxFiveCard == null) || (currentFiveCard.compareTo(maxFiveCard) > 0)) {
+				if ((maxFiveCard == null) || (currentFiveCard.getYaku().compareTo(maxFiveCard.getYaku()) > 0)) {
 					maxFiveCard = currentFiveCard;
 				}
 			}

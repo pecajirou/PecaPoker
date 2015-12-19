@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import com.pecapoker.playingcards.Card;
+import com.pecapoker.playingcards.CardSet;
 import com.pecapoker.playingcards.PcConst.Suits;
 
 public class FiveCardTest {
@@ -145,4 +146,15 @@ public class FiveCardTest {
 
 		assertEquals(true, FullHouse.getYaku().compareTo(FourOfAKind.getYaku()) < 0);
 	}
+
+	public void testCardCompare() {
+		CardSet cs1 = new CardSet("♠4♥8♥T♠6♥4");
+		CardSet cs2 = new CardSet("♠4♥8♥T♠6♠5");
+
+		FiveCard fv1 = new FiveCard(cs1);
+		FiveCard fv2 = new FiveCard(cs2);
+
+		assertEquals(true, fv1.getYaku().compareTo(fv2.getYaku()) > 0);
+	}
+
 }

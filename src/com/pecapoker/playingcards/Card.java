@@ -6,10 +6,15 @@ public class Card {
 	private int rank;
 	private Suits suits;
 
-	public Card(Suits s, int no)
+	public Card(Suits s, int rank)
 	{
 		this.setSuits(s);
-		this.setNo(no);
+		this.setRank(rank);
+	}
+
+	public Card(String str) {
+		this.setSuits(PcConst.CharToSuits(str.charAt(0)));
+		this.setRank(_charToRank(str.charAt(1)));
 	}
 
 	public Suits getSuits() {
@@ -39,7 +44,7 @@ public class Card {
 		}
 	}
 
-	public void setNo(int no) {
+	public void setRank(int no) {
 		this.rank = no;
 	}
 
@@ -95,27 +100,41 @@ public class Card {
 			ret += "♠";
 			break;
 		}
+		ret += _rankToStr();
+		return ret;
+	}
+
+	private String _rankToStr() {
 		switch(this.rank) {
 		case 1:
-			ret += "A";
-			break;
+			return "A";
 		case 10:
-			ret += "T";
-			break;
+			return"T";
 		case 11:
-			ret += "J";
-			break;
+			return"J";
 		case 12:
-			ret += "Q";
-			break;
+			return"Q";
 		case 13:
-			ret += "K";
-			break;
+			return"K";
 		default:
-			ret += this.rank;
-			break;
+			return "" + this.rank;
 		}
-		return ret;
+	}
+	private int _charToRank(char c) {
+		switch(c) {
+		case 'A':
+			return 1;
+		case 'T':
+			return 10;
+		case 'J':
+			return 11;
+		case 'Q':
+			return 12;
+		case 'K':
+			return 13;
+		default:
+			return Integer.parseInt(String.valueOf(c));
+		}
 	}
 }
 
