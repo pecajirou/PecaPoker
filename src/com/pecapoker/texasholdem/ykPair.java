@@ -3,11 +3,11 @@ package com.pecapoker.texasholdem;
 import com.pecapoker.playingcards.CardSet;
 
 public class YkPair extends Yaku {
-	int pairNo;
+	int pairRank;
 
-	public int getPairNo()
+	public int getPairRank()
 	{
-		return pairNo;
+		return pairRank;
 	}
 
 	@Override
@@ -17,7 +17,7 @@ public class YkPair extends Yaku {
 	}
 	public YkPair(FiveCard fv, int pn) {
 		super(fv);
-		pairNo = pn;
+		pairRank = pn;
 	}
 
 	@Override
@@ -27,12 +27,12 @@ public class YkPair extends Yaku {
 			return this.getYakuValue() - other.getYakuValue();
 		}
 		// ペアの数字で差がつく
-		if (this.getPairNo() - ((YkPair)other).getPairNo() != 0){
-			return this.getPairNo() - ((YkPair)other).getPairNo();
+		if (this.getPairRank() - ((YkPair)other).getPairRank() != 0){
+			return this.getPairRank() - ((YkPair)other).getPairRank();
 		}
 		// キッカーで差がつく
-		CardSet kicker1 = this.getFiveCard().diffCardSetExceptRank(this.getPairNo());
-		CardSet kicker2 = other.getFiveCard().diffCardSetExceptRank(((YkPair)other).getPairNo());
+		CardSet kicker1 = this.getFiveCard().diffCardSetExceptRank(this.getPairRank());
+		CardSet kicker2 = other.getFiveCard().diffCardSetExceptRank(((YkPair)other).getPairRank());
 		return kicker1.compareTo(kicker2);
 	}
 

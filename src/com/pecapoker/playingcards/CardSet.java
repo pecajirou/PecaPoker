@@ -67,15 +67,25 @@ public class CardSet {
 	 * @return
 	 */
 	public CardSet diffCardSetExceptRank(int rank) {
+		return diffCardSetExceptRank2(rank, -1);
+	}
+
+	/**
+	 * 指定された2つの数字のカードを除いたCardSetを返す
+	 * @param rank
+	 * @return
+	 */
+	public CardSet diffCardSetExceptRank2(int rank1, int rank2) {
 		CardSet cs = new CardSet();
 		for (Card c : this.getCardList()) {
-			if (c.getRank() == rank) {
+			if ((c.getRank() == rank1) || (c.getRank() == rank2)) {
 				continue;
 			}
 			cs.push(c);
 		}
 		return cs;
 	}
+
 
 	public void shuffle() {
 		cardList.sort(new CardComparator_shuffle());
