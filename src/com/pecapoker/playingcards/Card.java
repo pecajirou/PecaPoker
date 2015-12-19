@@ -3,7 +3,7 @@ package com.pecapoker.playingcards;
 import com.pecapoker.playingcards.PcConst.Suits;
 
 public class Card {
-	private int no;
+	private int rank;
 	private Suits suits;
 
 	public Card(Suits s, int no)
@@ -20,8 +20,8 @@ public class Card {
 		this.suits = suits;
 	}
 
-	public int getNo() {
-		return no;
+	public int getRank() {
+		return rank;
 	}
 
 	/**
@@ -31,16 +31,16 @@ public class Card {
 	 * @return
 	 */
 	public int getValue() {
-		if (no == 1) {
+		if (rank == 1) {
 			return 14;
 		}
 		else {
-			return no;
+			return rank;
 		}
 	}
 
 	public void setNo(int no) {
-		this.no = no;
+		this.rank = no;
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Card {
 		}
 		if (o instanceof Card) {
 			Card c = (Card)o;
-			if (c.getSuits() == this.suits && c.getNo() == this.no) {
+			if (c.getSuits() == this.suits && c.getRank() == this.rank) {
 				return true;
 			}
 		}
@@ -95,7 +95,7 @@ public class Card {
 			ret += "♠";
 			break;
 		}
-		switch(this.no) {
+		switch(this.rank) {
 		case 1:
 			ret += "A";
 			break;
@@ -112,7 +112,7 @@ public class Card {
 			ret += "K";
 			break;
 		default:
-			ret += this.no;
+			ret += this.rank;
 			break;
 		}
 		return ret;

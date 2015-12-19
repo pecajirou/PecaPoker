@@ -61,6 +61,21 @@ public class CardSet {
 		return allCs;
 	}
 
+	/**
+	 * 指定された数字のカードを除いたCardSetを返す
+	 * @param rank
+	 * @return
+	 */
+	public CardSet diffCardSetExceptRank(int rank) {
+		CardSet cs = new CardSet();
+		for (Card c : this.getCardList()) {
+			if (c.getRank() == rank) {
+				continue;
+			}
+			cs.push(c);
+		}
+		return cs;
+	}
 
 	public void shuffle() {
 		cardList.sort(new CardComparator_shuffle());
@@ -108,6 +123,28 @@ public class CardSet {
 			}
 		}
 		return maxCard;
+	}
+
+	public int compareTo(CardSet other) {
+		// 強い順にソート
+		this.getCardList().sort(new CardComparator_value_desc());
+		other.getCardList().sort(new CardComparator_value_desc());
+
+		int maxSize = Math.max(this.size(), other.size());
+		for(int i = 0; i < maxSize; i++) {
+			if (i > this.size()) {
+				return -1;
+			}
+			if (i > other.size()) {
+				return +1;
+			}
+			if (this.getCardList().get(i).getValue()
+					== other.getCardList().get(i).getValue()) {
+				continue;
+			}
+			return this.getCardList().get(i).getValue() - other.getCardList().get(i).getValue();
+		}
+		return 0;
 	}
 
 }

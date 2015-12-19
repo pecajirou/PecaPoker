@@ -12,7 +12,7 @@ public class CardTest {
 	public void testConstructor() {
 		Card c = new Card(Suits.SPADE, 1);
 		assertEquals(Suits.SPADE, c.getSuits());
-		assertEquals(1, c.getNo());
+		assertEquals(1, c.getRank());
 	}
 
 	@Test
@@ -53,4 +53,15 @@ public class CardTest {
 
 	}
 
+	@Test
+	public void testCompareTo()
+	{
+		Card c1 = new Card(Suits.DIA, 9);
+		Card c2 = new Card(Suits.DIA, 10);
+		assertEquals(true, c1.compareTo(c2) < 0);
+
+		c1 = new Card(Suits.DIA, 1);
+		c2 = new Card(Suits.DIA, 10);
+		assertEquals(true, c1.compareTo(c2) > 0);
+	}
 }

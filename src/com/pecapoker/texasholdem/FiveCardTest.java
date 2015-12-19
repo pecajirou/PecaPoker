@@ -18,7 +18,7 @@ public class FiveCardTest {
 				new Card(Suits.CRAB, 6));
 
 		assertEquals(true, five.getYaku() instanceof Yaku);
-		assertEquals(false, five.getYaku() instanceof ykPair);
+		assertEquals(false, five.getYaku() instanceof YkPair);
 
 		five = new FiveCard(new Card(Suits.CRAB, 1),
 				new Card(Suits.DIA, 1),
@@ -27,6 +27,6 @@ public class FiveCardTest {
 				new Card(Suits.CRAB, 6));
 
 		assertEquals(true, five.getYaku() instanceof Yaku);
-		assertEquals(true, five.getYaku() instanceof ykPair);
+		assertEquals(true, five.getYaku() instanceof YkPair);
 	}
 }

@@ -19,9 +19,9 @@ public class FiveCard extends CardSet {
 	private Yaku _calcYaku() {
 		int pairNo = _getPairNo();
 		if (pairNo > 0) {
-			return new ykPair(this, pairNo);
+			return new YkPair(this, pairNo);
 		}
-		return new Yaku();
+		return new Yaku(this);
 	}
 	/**
 	 * はじめに見つけたペアを返す
@@ -31,7 +31,7 @@ public class FiveCard extends CardSet {
 		int noArray[] = new int[14];
 		for(Card c : this.getCardList())
 		{
-			noArray[c.getNo()]++;
+			noArray[c.getRank()]++;
 		}
 		for(int i = 1 ; i < noArray.length; i++) {
 			if (noArray[i] >= 2) {
@@ -43,13 +43,4 @@ public class FiveCard extends CardSet {
 	public Yaku getYaku() {
 		return yaku;
 	}
-	public int compareTo(FiveCard other) {
-		if (this.getYaku().compareTo(other.getYaku()) == 0) {
-			return this.getHighestCard().getValue() - other.getHighestCard().getValue();
-		}
-		else {
-			return this.getYaku().compareTo(other.getYaku());
-		}
-	}
-
 }

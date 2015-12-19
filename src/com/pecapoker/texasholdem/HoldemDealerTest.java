@@ -301,7 +301,7 @@ public class HoldemDealerTest extends TestCase {
 		p1.receivePocket(new Card(Suits.CRAB, 7));
 		p2.receivePocket(new Card(Suits.DIA, 7));
 		p2.receivePocket(new Card(Suits.CRAB, 8));
-		p3.receivePocket(new Card(Suits.CRAB, 9));
+		p3.receivePocket(new Card(Suits.HEART, 7));
 		p3.receivePocket(new Card(Suits.DIA, 10));
 
 		for(int i = 0; i < d.getPlayers().size(); i++)
@@ -319,6 +319,7 @@ public class HoldemDealerTest extends TestCase {
 
 		//
 		// Verify
+		// p1とp3が引き分けて、150ずつ貰う
 		//
 		assertEquals(1050, p1.getChip());
 		assertEquals(900, p2.getChip());

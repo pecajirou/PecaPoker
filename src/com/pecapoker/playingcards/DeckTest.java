@@ -17,7 +17,7 @@ public class DeckTest {
 			for (int no = 1; no <= PcConst.NO_KING; no++) {
 				Card c = deck.pop();
 				assertEquals(s, c.getSuits());
-				assertEquals(no, c.getNo());
+				assertEquals(no, c.getRank());
 			}
 		}
 
@@ -43,12 +43,12 @@ public class DeckTest {
 			if (c.getSuits() != beforeSuits) {
 				diffSuits++;
 			}
-			if (c.getNo() != beforeNo + 1)
+			if (c.getRank() != beforeNo + 1)
 			{
 				diffNo++;
 			}
 			beforeSuits = c.getSuits();
-			beforeNo = c.getNo();
+			beforeNo = c.getRank();
 		}
 		// �P�O��ȏ�X�[�c�A�������ω����邱��
 		System.out.println("diffSuits=" + diffSuits + ", diffNo=" + diffNo);
