@@ -25,9 +25,12 @@ public class FiveCard extends CardSet {
 	}
 	private Yaku _calcYaku() {
 		List<RankCount> rankCountList = _getRankCountList();
+		int maxSuitsCount = _getMaxSuitsCount();
+		// 4カード
 		if (rankCountList.size() >= 1 && rankCountList.get(0).count >= 4) {
 			return new YkFourOfAKind(this, rankCountList.get(0).rank);
 		}
+		// フルハウス
 		if (rankCountList.size() >= 2 &&
 				(rankCountList.get(0).count >= 3 || rankCountList.get(1).count >= 3)) {
 			int trioRank, pairRank;
@@ -41,12 +44,19 @@ public class FiveCard extends CardSet {
 			}
 			return new YkFullHouse(this, trioRank, pairRank);
 		}
+		// フラッシュ
+		if (maxSuitsCount >= 5) {
+			return new YkFlash(this);
+		}
+		// 3カード
 		if (rankCountList.size() >= 1 && rankCountList.get(0).count >= 3) {
 			return new YkThreeOfAKind(this, rankCountList.get(0).rank);
 		}
+		// 2ペア
 		if (rankCountList.size() >= 2) {
 			return new YkTwoPair(this, rankCountList.get(0).rank, rankCountList.get(1).rank);
 		}
+		// 1ペア
 		if (rankCountList.size() >= 1) {
 			return new YkPair(this, rankCountList.get(0).rank);
 		}
@@ -71,6 +81,26 @@ public class FiveCard extends CardSet {
 			}
 		}
 		return rankCountList;
+	}
+
+	/**
+	 * 最大の同スーツの枚数を得る
+	 * @return
+	 */
+	private int _getMaxSuitsCount() {
+		int maxNum = -1;
+		int suitsArray[] = new int[4];
+
+		for(Card c : this.getCardList())
+		{
+			suitsArray[c.getSuits().ordinal()]++;
+		}
+		for (int i = 0; i < suitsArray.length; i++) {
+			if (suitsArray[i] > maxNum) {
+				maxNum = suitsArray[i];
+			}
+		}
+		return maxNum;
 	}
 
 	public Yaku getYaku() {
