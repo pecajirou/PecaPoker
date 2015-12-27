@@ -1,5 +1,7 @@
 package com.pecapoker.texasholdem;
 
+import com.pecapoker.playingcards.Card;
+
 public class YkFullHouse extends Yaku {
 	int trioRank;
 	int pairRank;
@@ -32,12 +34,12 @@ public class YkFullHouse extends Yaku {
 			return this.getYakuValue() - other.getYakuValue();
 		}
 		// 3枚のほうの数字で差がつく
-		if (this.getTrioRank() - ((YkFullHouse)other).getTrioRank() != 0){
-			return this.getTrioRank() - ((YkFullHouse)other).getTrioRank();
+		if (Card.rankToValue(this.getTrioRank()) - Card.rankToValue(((YkFullHouse)other).getTrioRank()) != 0){
+			return Card.rankToValue(this.getTrioRank()) - Card.rankToValue(((YkFullHouse)other).getTrioRank());
 		}
 		// 小さいほうのペアの数字で差がつく
-		if (this.getPairRank() - ((YkFullHouse)other).getPairRank() != 0){
-			return this.getPairRank() - ((YkFullHouse)other).getPairRank();
+		if (Card.rankToValue(this.getPairRank()) - Card.rankToValue(((YkFullHouse)other).getPairRank()) != 0){
+			return Card.rankToValue(this.getPairRank()) - Card.rankToValue(((YkFullHouse)other).getPairRank());
 		}
 		assert false;
 		return 0;

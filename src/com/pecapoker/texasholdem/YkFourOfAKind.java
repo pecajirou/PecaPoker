@@ -1,5 +1,6 @@
 package com.pecapoker.texasholdem;
 
+import com.pecapoker.playingcards.Card;
 import com.pecapoker.playingcards.CardSet;
 
 public class YkFourOfAKind extends Yaku {
@@ -26,9 +27,9 @@ public class YkFourOfAKind extends Yaku {
 		if (this.getYakuValue() - other.getYakuValue() != 0) {
 			return this.getYakuValue() - other.getYakuValue();
 		}
-		// トリオの数字で差がつく
-		if (this.getFourRank() - ((YkFourOfAKind)other).getFourRank() != 0){
-			return this.getFourRank() - ((YkFourOfAKind)other).getFourRank();
+		// 4枚の数字で差がつく
+		if (Card.rankToValue(this.getFourRank()) - Card.rankToValue(((YkFourOfAKind)other).getFourRank()) != 0){
+			return Card.rankToValue(this.getFourRank()) - Card.rankToValue(((YkFourOfAKind)other).getFourRank());
 		}
 		// キッカーで差がつく
 		CardSet kicker1 = this.getFiveCard().diffCardSetExceptRank(this.getFourRank());

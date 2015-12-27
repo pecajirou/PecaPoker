@@ -100,8 +100,9 @@ class HoldemDealer extends com.pecapoker.playingcards.Dealer {
 		return winners;
 	}
 
-	// TODO 6.ペアの判定
 	// TODO 7.ストレート、フラッシュ他の役
+	// TODO 7.5 画面
+
 	// TODO 8.button
 	// TODO 9.ブラインド
 	// TODO 10.Structure

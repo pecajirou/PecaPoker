@@ -36,14 +36,23 @@ public class Card {
 	 * @return
 	 */
 	public int getValue() {
-		if (rank == 1) {
+		return rankToValue(this.rank);
+	}
+
+	/**
+	 * カードの強さを返す
+	 * No=1の場合は14を返す。それ以外はそのままNoを返す
+	 * No=1 を1と評価したい場合や、スーツに強さを持たせる場合はオーバーライドするクラスを作ること
+	 * @return
+	 */
+	static public int rankToValue(int r) {
+		if (r == 1) {
 			return 14;
 		}
 		else {
-			return rank;
+			return r;
 		}
 	}
-
 	public void setRank(int no) {
 		this.rank = no;
 	}

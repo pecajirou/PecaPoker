@@ -1,5 +1,6 @@
 package com.pecapoker.texasholdem;
 
+import com.pecapoker.playingcards.Card;
 import com.pecapoker.playingcards.CardSet;
 
 public class YkThreeOfAKind extends Yaku {
@@ -27,8 +28,8 @@ public class YkThreeOfAKind extends Yaku {
 			return this.getYakuValue() - other.getYakuValue();
 		}
 		// トリオの数字で差がつく
-		if (this.getTrioRank() - ((YkThreeOfAKind)other).getTrioRank() != 0){
-			return this.getTrioRank() - ((YkThreeOfAKind)other).getTrioRank();
+		if (Card.rankToValue(this.getTrioRank()) - Card.rankToValue(((YkThreeOfAKind)other).getTrioRank()) != 0) {
+			return Card.rankToValue(this.getTrioRank()) - Card.rankToValue(((YkThreeOfAKind)other).getTrioRank());
 		}
 		// キッカーで差がつく
 		CardSet kicker1 = this.getFiveCard().diffCardSetExceptRank(this.getTrioRank());

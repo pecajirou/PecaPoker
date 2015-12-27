@@ -26,6 +26,22 @@ public class YkPairTest {
 
 		assertEquals(0, pair1.compareTo(pair2));
 
+		// ペアの大きさで比較
+		fv = new FiveCard(new Card(Suits.CRAB, 6),
+				new Card(Suits.CRAB, 2),
+				new Card(Suits.CRAB, 4),
+				new Card(Suits.CRAB, 5),
+				new Card(Suits.DIA, 5)
+				);
+		pair1 = new YkPair(fv, 1);
+		pair2 = new YkPair(fv, 6);
+		assertEquals(true, pair1.compareTo(pair2) > 0);
+
+		pair1 = new YkPair(fv, 5);
+		pair2 = new YkPair(fv, 5);
+
+		assertEquals(0, pair1.compareTo(pair2));
+
 		// キッカーで比較
 		FiveCard fv2 = new FiveCard(new Card(Suits.CRAB, 6),
 				new Card(Suits.CRAB, 2),
