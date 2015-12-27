@@ -28,6 +28,22 @@ public class FiveCard extends CardSet {
 	private Yaku _calcYaku() {
 		List<RankCount> rankCountList = _getRankCountList();
 		int maxSuitsCount = _getMaxSuitsCount();
+		int contNum = _getContCount();
+		int contNum_Ais1 = _getContCount_Ais1();
+
+		// ストレートフラッシュ
+		if (maxSuitsCount >= 5) {
+			// （AをKの次として扱う）ストレート
+			if (contNum >= 5) {
+				return new YkStraightFlash(this);
+			}
+			// （Aを1として扱う）ストレート
+			if (contNum_Ais1 >= 5) {
+				_changeAtoSmallA();
+				return new YkStraightFlash(this);
+			}
+		}
+
 		// 4カード
 		if (rankCountList.size() >= 1 && rankCountList.get(0).count >= 4) {
 			return new YkFourOfAKind(this, rankCountList.get(0).rank);
@@ -51,17 +67,12 @@ public class FiveCard extends CardSet {
 			return new YkFlash(this);
 		}
 		// （AをKの次として扱う）ストレート
-		int contNum = _getContCount();
 		if (contNum >= 5) {
 			return new YkStraight(this);
 		}
 		// （Aを1として扱う）ストレート
-		contNum = _getContCount_Ais1();
-		if (contNum >= 5) {
-			assert this.get(0).getRank() == 1;
-			Card smallA = new SmallACard(this.get(0));
-			this.cardList.remove(0);
-			this.push(smallA);
+		if (contNum_Ais1 >= 5) {
+			_changeAtoSmallA();
 			return new YkStraight(this);
 		}
 		// 3カード
@@ -77,6 +88,12 @@ public class FiveCard extends CardSet {
 			return new YkPair(this, rankCountList.get(0).rank);
 		}
 		return new Yaku(this);
+	}
+	private void _changeAtoSmallA() {
+		assert this.get(0).getRank() == 1;
+		Card smallA = new SmallACard(this.get(0));
+		this.cardList.remove(0);
+		this.push(smallA);
 	}
 
 	/**
