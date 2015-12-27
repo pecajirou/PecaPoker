@@ -21,6 +21,7 @@ public class FiveCardTest {
 		assertEquals(true, five.getYaku() instanceof Yaku);
 		assertEquals(false, five.getYaku() instanceof YkPair);
 		assertEquals(false, five.getYaku() instanceof YkTwoPair);
+		assertEquals(false, five.getYaku() instanceof YkStraight);
 		assertEquals(false, five.getYaku() instanceof YkFlash);
 		assertEquals(false, five.getYaku() instanceof YkFullHouse);
 		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
@@ -35,6 +36,7 @@ public class FiveCardTest {
 		assertEquals(true, five.getYaku() instanceof YkPair);
 		assertEquals(false, five.getYaku() instanceof YkTwoPair);
 		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(false, five.getYaku() instanceof YkStraight);
 		assertEquals(false, five.getYaku() instanceof YkFlash);
 		assertEquals(false, five.getYaku() instanceof YkFullHouse);
 		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
@@ -49,6 +51,7 @@ public class FiveCardTest {
 		assertEquals(false, five.getYaku() instanceof YkPair);
 		assertEquals(true, five.getYaku() instanceof YkTwoPair);
 		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(false, five.getYaku() instanceof YkStraight);
 		assertEquals(false, five.getYaku() instanceof YkFlash);
 		assertEquals(false, five.getYaku() instanceof YkFullHouse);
 		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
@@ -64,6 +67,7 @@ public class FiveCardTest {
 		assertEquals(false, five.getYaku() instanceof YkTwoPair);
 		assertEquals(true, five.getYaku() instanceof YkThreeOfAKind);
 		assertEquals(false, five.getYaku() instanceof YkFlash);
+		assertEquals(false, five.getYaku() instanceof YkStraight);
 		assertEquals(false, five.getYaku() instanceof YkFullHouse);
 		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
 
@@ -77,6 +81,7 @@ public class FiveCardTest {
 		assertEquals(false, five.getYaku() instanceof YkPair);
 		assertEquals(false, five.getYaku() instanceof YkTwoPair);
 		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(false, five.getYaku() instanceof YkStraight);
 		assertEquals(false, five.getYaku() instanceof YkFlash);
 		assertEquals(true, five.getYaku() instanceof YkFullHouse);
 		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
@@ -91,6 +96,7 @@ public class FiveCardTest {
 		assertEquals(false, five.getYaku() instanceof YkPair);
 		assertEquals(false, five.getYaku() instanceof YkTwoPair);
 		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(false, five.getYaku() instanceof YkStraight);
 		assertEquals(false, five.getYaku() instanceof YkFlash);
 		assertEquals(false, five.getYaku() instanceof YkFullHouse);
 		assertEquals(true, five.getYaku() instanceof YkFourOfAKind);
@@ -105,9 +111,75 @@ public class FiveCardTest {
 		assertEquals(false, five.getYaku() instanceof YkPair);
 		assertEquals(false, five.getYaku() instanceof YkTwoPair);
 		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(false, five.getYaku() instanceof YkStraight);
 		assertEquals(true, five.getYaku() instanceof YkFlash);
 		assertEquals(false, five.getYaku() instanceof YkFullHouse);
 		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
+
+		five = new FiveCard(new Card(Suits.DIA, 7),
+				new Card(Suits.HEART, 4),
+				new Card(Suits.HEART, 5),
+				new Card(Suits.HEART, 8),
+				new Card(Suits.HEART, 6));
+
+		assertEquals(true, five.getYaku() instanceof Yaku);
+		assertEquals(false, five.getYaku() instanceof YkPair);
+		assertEquals(false, five.getYaku() instanceof YkTwoPair);
+		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(true, five.getYaku() instanceof YkStraight);
+		assertEquals(false, five.getYaku() instanceof YkFlash);
+		assertEquals(false, five.getYaku() instanceof YkFullHouse);
+		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
+
+		/*
+		five = new FiveCard(new Card(Suits.HEART, 7),
+				new Card(Suits.HEART, 4),
+				new Card(Suits.HEART, 5),
+				new Card(Suits.HEART, 8),
+				new Card(Suits.HEART, 6));
+
+		assertEquals(true, five.getYaku() instanceof Yaku);
+		assertEquals(false, five.getYaku() instanceof YkPair);
+		assertEquals(false, five.getYaku() instanceof YkTwoPair);
+		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(true, five.getYaku() instanceof YkStraight);
+		assertEquals(false, five.getYaku() instanceof YkFlash);
+		assertEquals(false, five.getYaku() instanceof YkFullHouse);
+		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
+		*/
+	}
+	@Test
+	public void testGetYaku_straight() {
+		FiveCard five = new FiveCard(new Card(Suits.DIA, 7),
+				new Card(Suits.HEART, 4),
+				new Card(Suits.HEART, 5),
+				new Card(Suits.HEART, 8),
+				new Card(Suits.HEART, 6));
+
+		assertEquals(true, five.getYaku() instanceof Yaku);
+		assertEquals(false, five.getYaku() instanceof YkPair);
+		assertEquals(false, five.getYaku() instanceof YkTwoPair);
+		assertEquals(false, five.getYaku() instanceof YkThreeOfAKind);
+		assertEquals(true, five.getYaku() instanceof YkStraight);
+		assertEquals(false, five.getYaku() instanceof YkFlash);
+		assertEquals(false, five.getYaku() instanceof YkFullHouse);
+		assertEquals(false, five.getYaku() instanceof YkFourOfAKind);
+
+		five = new FiveCard(new Card(Suits.DIA, 5),
+				new Card(Suits.HEART, 2),
+				new Card(Suits.HEART, 3),
+				new Card(Suits.HEART, 4),
+				new Card(Suits.HEART, 1));
+
+		assertEquals(true, five.getYaku() instanceof YkStraight);
+
+		five = new FiveCard(new Card(Suits.DIA, 10),
+				new Card(Suits.HEART, 11),
+				new Card(Suits.HEART, 12),
+				new Card(Suits.HEART, 13),
+				new Card(Suits.HEART, 1));
+
+		assertEquals(true, five.getYaku() instanceof YkStraight);
 	}
 
 	/**
@@ -148,6 +220,33 @@ public class FiveCardTest {
 
 		assertEquals(true, twoPair.getYaku().compareTo(threeOfAKind.getYaku()) < 0);
 
+		FiveCard straight = new FiveCard(
+				new Card(Suits.CRAB, 4),
+				new Card(Suits.DIA, 2),
+				new Card(Suits.DIA, 3),
+				new Card(Suits.DIA, 5),
+				new Card(Suits.DIA, 6));
+
+		assertEquals(true, straight.getYaku().compareTo(threeOfAKind.getYaku()) > 0);
+
+		FiveCard straight_smallA = new FiveCard(
+				new Card(Suits.CRAB, 4),
+				new Card(Suits.DIA, 2),
+				new Card(Suits.DIA, 3),
+				new Card(Suits.DIA, 5),
+				new Card(Suits.DIA, 1));
+
+		assertEquals(true, straight.getYaku().compareTo(straight_smallA.getYaku()) > 0);
+
+		FiveCard straight_largeA = new FiveCard(
+				new Card(Suits.CRAB, 12),
+				new Card(Suits.DIA, 13),
+				new Card(Suits.DIA, 11),
+				new Card(Suits.DIA, 10),
+				new Card(Suits.DIA, 1));
+
+		assertEquals(true, straight.getYaku().compareTo(straight_largeA.getYaku()) < 0);
+
 		FiveCard flash = new FiveCard(
 				new Card(Suits.DIA, 4),
 				new Card(Suits.DIA, 2),
@@ -155,7 +254,7 @@ public class FiveCardTest {
 				new Card(Suits.DIA, 7),
 				new Card(Suits.DIA, 6));
 
-		assertEquals(true, flash.getYaku().compareTo(threeOfAKind.getYaku()) > 0);
+		assertEquals(true, flash.getYaku().compareTo(straight.getYaku()) > 0);
 
 		FiveCard FullHouse = new FiveCard(
 				new Card(Suits.CRAB, 2),

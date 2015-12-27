@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pecapoker.playingcards.Card;
+import com.pecapoker.playingcards.CardComparator_rank;
+import com.pecapoker.playingcards.CardComparator_value;
 import com.pecapoker.playingcards.CardSet;
 import com.pecapoker.playingcards.RankCount;
 
@@ -48,6 +50,20 @@ public class FiveCard extends CardSet {
 		if (maxSuitsCount >= 5) {
 			return new YkFlash(this);
 		}
+		// （AをKの次として扱う）ストレート
+		int contNum = _getContCount();
+		if (contNum >= 5) {
+			return new YkStraight(this);
+		}
+		// （Aを1として扱う）ストレート
+		contNum = _getContCount_Ais1();
+		if (contNum >= 5) {
+			assert this.get(0).getRank() == 1;
+			Card smallA = new SmallACard(this.get(0));
+			this.cardList.remove(0);
+			this.push(smallA);
+			return new YkStraight(this);
+		}
 		// 3カード
 		if (rankCountList.size() >= 1 && rankCountList.get(0).count >= 3) {
 			return new YkThreeOfAKind(this, rankCountList.get(0).rank);
@@ -61,6 +77,48 @@ public class FiveCard extends CardSet {
 			return new YkPair(this, rankCountList.get(0).rank);
 		}
 		return new Yaku(this);
+	}
+
+	/**
+	 * 連続するランクの数を数える
+	 * @param contNum
+	 * @return
+	 */
+	private int _getContCount() {
+		int contNum = 0;
+		this.getCardList().sort(new CardComparator_value());
+		Card beforeCard = null;
+		for (Card c : this.getCardList()) {
+			if (beforeCard != null){
+				if (c.getValue() != beforeCard.getValue() + 1) {
+					break;
+				}
+			}
+			beforeCard = c;
+			contNum++;
+		}
+		return contNum;
+	}
+
+	/**
+	 * 連続するランクの数を数える
+	 * @param contNum
+	 * @return
+	 */
+	private int _getContCount_Ais1() {
+		int contNum = 0;
+		this.getCardList().sort(new CardComparator_rank());
+		Card beforeCard = null;
+		for (Card c : this.getCardList()) {
+			if (beforeCard != null){
+				if (c.getRank() != beforeCard.getRank() + 1) {
+					break;
+				}
+			}
+			beforeCard = c;
+			contNum++;
+		}
+		return contNum;
 	}
 
 	/**
