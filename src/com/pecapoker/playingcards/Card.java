@@ -2,6 +2,11 @@ package com.pecapoker.playingcards;
 
 import com.pecapoker.playingcards.PcConst.Suits;
 
+/**
+ * カードクラス
+ * @author jirou
+ *
+ */
 public class Card {
 	private int rank;
 	private Suits suits;
